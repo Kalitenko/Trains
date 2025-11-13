@@ -10,7 +10,8 @@ enum APIClientFactory {
             serverURL: try! Servers.Server1.url(),
             transport: transport,
             middlewares: [
-                APIKeyAuthMiddleware(apiKey: apiKey)
+                APIKeyAuthMiddleware(apiKey: apiKey),
+                AuthorizationHeaderLoggingMiddleware()
             ]
         )
     }
