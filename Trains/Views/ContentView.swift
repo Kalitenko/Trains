@@ -22,15 +22,8 @@ struct ContentView: View {
     func testFetchStations() {
         Task {
             do {
-                let client = Client(
-                    serverURL: try Servers.Server1.url(),
-                    transport: URLSessionTransport()
-                )
-                
-                let service = NearestStationsService(
-                    client: client,
-                    apikey: apiKey
-                )
+                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                let service = NearestStationsService(client: client)
                 
                 print("Fetching stations...")
                 let stations = try await service.getNearestStations(
@@ -49,14 +42,8 @@ struct ContentView: View {
     func testFetchCopyright() {
         Task {
             do {
-                let client = Client(
-                    serverURL: try Servers.Server1.url(),
-                    transport: URLSessionTransport()
-                )
-                let service = CopyrightService(
-                    client: client,
-                    apikey: apiKey
-                )
+                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                let service = CopyrightService(client: client)
                 
                 print("Fetching copyright...")
                 let copyright = try await service.getCopyright()

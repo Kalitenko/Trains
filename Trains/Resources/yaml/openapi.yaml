@@ -15,13 +15,10 @@ paths:
       - getCopyright
       summary: Копирайт Яндекс Расписаний
       operationId: getCopyright
+      security:
+        - ApiKeyHeaderAuth: []
+        - ApiKeyQueryAuth: []
       parameters:
-      - name: apikey
-        in: query
-        description: API key
-        required: true
-        schema:
-          type: string
       - name: format
         in: query
         description: json или xml
@@ -42,13 +39,10 @@ paths:
       - getNearestStations
       summary: Список ближайших станций
       operationId: getNearestStations
+      security:
+        - ApiKeyHeaderAuth: []
+        - ApiKeyQueryAuth: []
       parameters:
-      - name: apikey
-        in: query
-        description: API key
-        required: true
-        schema:
-          type: string
       - name: lat
         in: query
         description: широта
@@ -87,6 +81,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/Stations'
 components:
+  securitySchemes:
+    ApiKeyHeaderAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        Pass API key in Authorization header, e.g.:
+        Authorization: ApiKey <your_key>
+
+    ApiKeyQueryAuth:
+      type: apiKey
+      in: query
+      name: apikey
+      description: |
+        Pass API key as query parameter, e.g.:
+        ?apikey=<your_key>
   schemas:
     Stations:
       type: object
