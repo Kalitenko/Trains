@@ -66,9 +66,9 @@ struct Logger {
     }
     
     static func warning(_ message: String,
-                      file: String = #fileID,
-                      function: String = #function,
-                      line: Int = #line) {
+                        file: String = #fileID,
+                        function: String = #function,
+                        line: Int = #line) {
         log(message, emoji: .warning, file: file, function: function, line: line, column: nil)
     }
     
