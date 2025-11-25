@@ -4,7 +4,7 @@ import SwiftUI
 struct TrainsApp: App {    
     var body: some Scene {
         WindowGroup {
-            LaunchScreenView()
+            MainView()
         }
     }
 }
