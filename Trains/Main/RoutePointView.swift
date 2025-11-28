@@ -1,12 +1,12 @@
 import SwiftUI
 
-struct DestinationTextView: View {
+struct RoutePointView: View {
     
     let placeholder: String
     let settlement: String
     let station: String
     
-    private var destination: String {
+    private var routePoint: String {
         if settlement.isEmpty && station.isEmpty {
             return ""
         }
@@ -15,10 +15,10 @@ struct DestinationTextView: View {
 
     var body: some View {
         HStack {
-            Text(destination.isEmpty ? placeholder : destination)
+            Text(routePoint.isEmpty ? placeholder : routePoint)
                 .font(.system(size: 17, weight: .regular))
-                .foregroundColor(destination.isEmpty ? .appGray : .appBlack)
-                .padding(.leading, destination.isEmpty ? 16 : 13)
+                .foregroundColor(routePoint.isEmpty ? .appGray : .appBlack)
+                .padding(.leading, routePoint.isEmpty ? 16 : 13)
             Spacer()
         }
         .padding(.vertical, 14)
@@ -34,11 +34,11 @@ struct DestinationTextView: View {
 
 #Preview {
     VStack(spacing: 20) {
-        DestinationTextView(placeholder: "Куда")
+        RoutePointView(placeholder: "Куда")
             .padding(10)
             .background(Color.yellow)
         
-        DestinationTextView(placeholder: "Куда", settlement: "Туда", station: "Вокзал")
+        RoutePointView(placeholder: "Куда", settlement: "Туда", station: "Вокзал")
             .padding(10)
             .background(Color.yellow)
     }
