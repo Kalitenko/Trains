@@ -13,7 +13,7 @@ struct RoundedRectangleButton: View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Text(title)
-                    .font(.system(size: 17, weight: .bold))
+                    .font(.bold17)
                     .foregroundColor(textColor)
                 
                 if showDot {

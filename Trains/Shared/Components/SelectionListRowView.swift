@@ -7,7 +7,7 @@ struct SelectionListRowView: View {
     var body: some View {
         HStack{
             Text(title)
-                .font(.system(size: 17, weight: .regular))
+                .font(.regular17)
                 .foregroundColor(.appTextPrimary)
             Spacer()
             Image(systemName: "chevron.right")

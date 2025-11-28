@@ -31,7 +31,7 @@ struct SelectionListView: View {
         .overlay {
             if filteredItems.isEmpty {
                 Text(notFoundText)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.bold24)
             }
         }
         .navigationTitle(title)

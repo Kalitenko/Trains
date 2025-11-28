@@ -16,7 +16,7 @@ struct RoutePointView: View {
     var body: some View {
         HStack {
             Text(routePoint.isEmpty ? placeholder : routePoint)
-                .font(.system(size: 17, weight: .regular))
+                .font(.regular17)
                 .foregroundColor(routePoint.isEmpty ? .appGray : .appBlack)
                 .padding(.leading, routePoint.isEmpty ? 16 : 13)
             Spacer()

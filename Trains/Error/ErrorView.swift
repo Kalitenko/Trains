@@ -35,7 +35,7 @@ struct ErrorView: View {
                        height: side ?? defaultSide)
 
                 Text(type.text)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.bold24)
                     .foregroundStyle(.appTextPrimary)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
