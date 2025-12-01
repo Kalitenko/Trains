@@ -22,6 +22,7 @@ struct PrimaryButton: View {
             backgroundColor: Color.appBlue,
             showDot: showDot,
             width: width)
+        .padding(.horizontal, width == nil ? 16 : 0)
     }
 }
 
