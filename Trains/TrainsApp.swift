@@ -7,7 +7,6 @@ struct TrainsApp: App {
             NavigationStack {
                 TabBarView()
             }
-            .appBackground()
         }
     }
 }

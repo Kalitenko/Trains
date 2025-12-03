@@ -9,6 +9,7 @@ struct MainView: View {
     @State private var showFlow = false
     @State private var isWhitherFlow = true
     @State private var showCarriers = false
+    @State private var showCarrierInfo = false
     
     private var buttonIsEnabled: Bool {
         !whither.settlement.isEmpty && !whence.settlement.isEmpty
@@ -45,7 +46,13 @@ struct MainView: View {
             .fullScreenCover(isPresented: $showCarriers) {
                 let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
                 NavigationStack {
-                    CarrierSelectionView(title: title, carriers: carriers)
+                    CarrierSelectionView(title: title, carriers: carriers) { carrierName in
+                        Logger.info("Выбран \(carrierName)")
+                        showCarrierInfo = true
+                    }
+                    .navigationDestination(isPresented: $showCarrierInfo) {
+                        CarrierInfoView()
+                    }
                 }
             }
             .padding(.top, 20)

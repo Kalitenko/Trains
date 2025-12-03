@@ -4,6 +4,7 @@ struct CarrierSelectionView: View {
     
     let title: String
     let carriers: [Carrier]
+    let onSelect: (String) -> Void
     
     @Environment(\.dismiss) private var dismiss
     @State private var showFilters = false
@@ -17,10 +18,14 @@ struct CarrierSelectionView: View {
                 Text(title)
                     .font(.bold24)
                 List(carriers, id: \.self) { carrier in
-                    CarrierSelectionRowView(carrier: carrier)
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.appBackground)
-                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                    Button {
+                        onSelect(carrier.carrierName)
+                    } label: {
+                        CarrierSelectionRowView(carrier: carrier)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.appBackground)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                    }
                 }
                 .listStyle(.plain)
             }
@@ -68,7 +73,11 @@ struct CarrierSelectionView: View {
     NavigationStack {
         CarrierSelectionView(
             title: "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)",
-            carriers: carriers
+            carriers: carriers,
+            onSelect: { name in
+                print("Выбран перевозчик \(name)")
+            }
         )
+        .preferredColorScheme(.dark)
     }
 }
