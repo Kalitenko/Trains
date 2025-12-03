@@ -13,28 +13,30 @@ struct CarrierSelectionView: View {
     @State private var selectedOption: TransferOption?
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            VStack {
-                titleView
-                list
-            }
-            .background(Color.appBackground)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .overlay {
-                if carriers.isEmpty {
-                    noOptionsText
+        ParentContainer {
+            ZStack(alignment: .bottom) {
+                VStack {
+                    titleView
+                    list
                 }
+                .background(Color.appBackground)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay {
+                    if carriers.isEmpty {
+                        noOptionsText
+                    }
+                }
+                
+                .backButtonToolbar(dismiss)
+                button
             }
-            
-            .backButtonToolbar(dismiss)
-            button
-        }
-        .fullScreenCover(isPresented: $showFilters) {
-            NavigationStack {
-                FilterView(
-                    selectedTimeRanges: $selectedTimeRanges,
-                    selectedOption: $selectedOption
-                )
+            .fullScreenCover(isPresented: $showFilters) {
+                NavigationStack {
+                    FilterView(
+                        selectedTimeRanges: $selectedTimeRanges,
+                        selectedOption: $selectedOption
+                    )
+                }
             }
         }
     }

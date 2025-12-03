@@ -10,18 +10,20 @@ struct CarrierInfoView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Image(imageName)
-            name
-            contacts
-            Spacer()
+        ParentContainer {
+            VStack(alignment: .leading, spacing: 16) {
+                Image(imageName)
+                name
+                contacts
+                Spacer()
+            }
+            .padding(16)
+            .appBackground()
+            .navigationTitle("Информация о перевозчике")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .backButtonToolbar(dismiss)
         }
-        .padding(16)
-        .appBackground()
-        .navigationTitle("Информация о перевозчике")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .backButtonToolbar(dismiss)
     }
     
     

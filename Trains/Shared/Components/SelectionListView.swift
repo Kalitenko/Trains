@@ -16,31 +16,33 @@ struct SelectionListView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
-            List(filteredItems, id: \.self) { item in
-                Button {
-                    onSelect(item)
-                } label: {
-                    SelectionListRowView(title: item)
+        ParentContainer {
+            VStack(spacing: 0) {
+                SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
+                List(filteredItems, id: \.self) { item in
+                    Button {
+                        onSelect(item)
+                    } label: {
+                        SelectionListRowView(title: item)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.appBackground)
                 }
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.appBackground)
-            }
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
-            .background(Color.appBackground)
-            .overlay {
-                if filteredItems.isEmpty {
-                    Text(notFoundText)
-                        .font(.bold24)
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .background(Color.appBackground)
+                .overlay {
+                    if filteredItems.isEmpty {
+                        Text(notFoundText)
+                            .font(.bold24)
+                    }
                 }
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                .backButtonToolbar(dismiss)
             }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .backButtonToolbar(dismiss)
+            .appBackground()
         }
-        .appBackground()
     }
 }
 

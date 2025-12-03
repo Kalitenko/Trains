@@ -17,57 +17,59 @@ struct MainView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
-            RoutePointsSelectionView(
-                whither: $whither,
-                whence: $whence,
-                whitherAction: {
-                    isWhitherFlow = true
-                    showFlow = true
-                },
-                whenceAction: {
-                    isWhitherFlow = false
-                    showFlow = true
-                },
-                swapAction: { swap() }
-            )
-            .padding(.horizontal, 16)
-            .fullScreenCover(isPresented: $showFlow) {
-                FlowView { settlement, station in
-                    if isWhitherFlow {
-                        whither.settlement = settlement
-                        whither.station = station
-                    } else {
-                        whence.settlement = settlement
-                        whence.station = station
+        ParentContainer {
+            VStack(spacing: 16) {
+                RoutePointsSelectionView(
+                    whither: $whither,
+                    whence: $whence,
+                    whitherAction: {
+                        isWhitherFlow = true
+                        showFlow = true
+                    },
+                    whenceAction: {
+                        isWhitherFlow = false
+                        showFlow = true
+                    },
+                    swapAction: { swap() }
+                )
+                .padding(.horizontal, 16)
+                .fullScreenCover(isPresented: $showFlow) {
+                    FlowView { settlement, station in
+                        if isWhitherFlow {
+                            whither.settlement = settlement
+                            whither.station = station
+                        } else {
+                            whence.settlement = settlement
+                            whence.station = station
+                        }
+                        showFlow = false
                     }
-                    showFlow = false
                 }
+                .fullScreenCover(isPresented: $showCarriers) {
+                    let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
+                    NavigationStack {
+                        CarrierSelectionView(title: title, carriers: carriers) { carrierName in
+                            Logger.info("Выбран \(carrierName)")
+                            showCarrierInfo = true
+                        }
+                        .navigationDestination(isPresented: $showCarrierInfo) {
+                            CarrierInfoView()
+                        }
+                    }
+                }
+                .padding(.top, 20)
+                
+                PrimaryButton(
+                    title: "Найти",
+                    width: 150) {
+                        showCarriers = true
+                    }
+                    .opacity(buttonIsEnabled ? 1 : 0)
+                
+                Spacer()
             }
-            .fullScreenCover(isPresented: $showCarriers) {
-                let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
-                NavigationStack {
-                    CarrierSelectionView(title: title, carriers: carriers) { carrierName in
-                        Logger.info("Выбран \(carrierName)")
-                        showCarrierInfo = true
-                    }
-                    .navigationDestination(isPresented: $showCarrierInfo) {
-                        CarrierInfoView()
-                    }
-                }
-            }
-            .padding(.top, 20)
-            
-            PrimaryButton(
-                title: "Найти",
-                width: 150) {
-                    showCarriers = true
-                }
-                .opacity(buttonIsEnabled ? 1 : 0)
-            
-            Spacer()
+            .appBackground()
         }
-        .appBackground()
     }
     
     private func swap() {
