@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct FilterHeaderView: View {
-    var header: String
+    let header: String
     
     var body: some View {
         HStack {
             Text(header)
-            .font(.bold24)
-            .foregroundColor(.appTextPrimary)
+                .font(.bold24)
+                .foregroundStyle(.appTextPrimary)
             Spacer()
         }
         .padding(16)

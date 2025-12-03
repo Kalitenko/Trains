@@ -22,7 +22,7 @@ struct RoutePointButton: View {
         view: RoutePointView(placeholder: "Куда"),
         action: {
             print("DestinationButton tapped")
-    })
+        })
     .padding(10)
     .background(Color.yellow)
 }

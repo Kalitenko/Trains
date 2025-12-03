@@ -7,17 +7,17 @@ struct RoutePointView: View {
     let station: String
     
     private var routePoint: String {
-        if settlement.isEmpty && station.isEmpty {
+        guard !(settlement.isEmpty && station.isEmpty) else {
             return ""
         }
         return "\(settlement) (\(station))"
     }
-
+    
     var body: some View {
         HStack {
             Text(routePoint.isEmpty ? placeholder : routePoint)
                 .font(.regular17)
-                .foregroundColor(routePoint.isEmpty ? .appGray : .appBlack)
+                .foregroundStyle(routePoint.isEmpty ? .appGray : .appBlack)
                 .padding(.leading, routePoint.isEmpty ? 16 : 13)
             Spacer()
         }

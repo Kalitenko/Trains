@@ -17,13 +17,12 @@ struct FilterView: View {
         }
         .backButtonToolbar(dismiss)
         Spacer()
-        if buttonIsEnabled {
-            PrimaryButton(title: "Применить",
-                          action: {
-                dismiss()
-            })
-            .padding(.bottom, 24)
-        }
+        PrimaryButton(title: "Применить",
+                      action: {
+            dismiss()
+        })
+        .opacity(buttonIsEnabled ? 1 : 0)
+        .padding(.bottom, 24)
     }
     
     private var departureTimeSection: some View {

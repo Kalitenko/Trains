@@ -11,12 +11,12 @@ struct CheckItemView: View {
     var isSelected: Bool
     let style: CheckItemViewStyle
     let action: () -> Void
-
+    
     var body: some View {
         HStack {
             Text(text)
                 .font(.regular17)
-                .foregroundColor(.appTextPrimary)
+                .foregroundStyle(.appTextPrimary)
             Spacer()
             icon
                 .font(.system(size: 20, weight: .semibold))
@@ -33,11 +33,11 @@ struct CheckItemView: View {
         switch style {
         case .square:
             Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                .foregroundColor(.appTextPrimary)
-
+                .foregroundStyle(.appTextPrimary)
+            
         case .circle:
             Image(systemName: isSelected ? "record.circle" : "circle")
-                .foregroundColor(.appTextPrimary)
+                .foregroundStyle(.appTextPrimary)
         }
     }
 }

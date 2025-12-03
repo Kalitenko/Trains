@@ -19,8 +19,7 @@ struct RoutePointsSelectionView: View {
         }
         .padding(16)
         .background(Color.appBlue)
-        .cornerRadius(20)
-        
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 }
 

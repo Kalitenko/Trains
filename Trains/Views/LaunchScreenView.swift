@@ -6,7 +6,7 @@ struct LaunchScreenView: View {
     
     var body: some View {
         if isActive {
-            ContentView()
+            TabBarView()
         } else {
             ZStack {
                 Color.black

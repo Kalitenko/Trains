@@ -31,6 +31,7 @@ struct MainView: View {
                 },
                 swapAction: { swap() }
             )
+            .padding(.horizontal, 16)
             .fullScreenCover(isPresented: $showFlow) {
                 FlowView { settlement, station in
                     if isWhitherFlow {
@@ -57,13 +58,13 @@ struct MainView: View {
             }
             .padding(.top, 20)
             
-            if buttonIsEnabled {
-                PrimaryButton(title: "Найти",
-                              action: {
+            PrimaryButton(
+                title: "Найти",
+                action: {
                     showCarriers = true
                 },
-                              width: 150)
-            }
+                width: 150)
+            .opacity(buttonIsEnabled ? 1 : 0)
             
             Spacer()
         }
@@ -92,7 +93,7 @@ struct MainView: View {
     ]
 }
 
-struct FlowView: View {
+private struct FlowView: View {
     
     @Environment(\.dismiss) private var dismiss
     

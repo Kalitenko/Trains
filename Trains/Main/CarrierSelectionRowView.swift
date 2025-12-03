@@ -10,7 +10,7 @@ struct CarrierSelectionRowView: View {
             lowRowPart
         }
         .background(.appLightGray)
-        .cornerRadius(24)
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
         
     }
     
@@ -19,8 +19,7 @@ struct CarrierSelectionRowView: View {
             carrierPic
             textPart
         }
-        .padding(.leading, 14)
-        .padding(.top, 14)
+        .padding([.top, .leading], 14)
         .padding(.bottom, 4)
         .padding(.trailing, 7)
     }
@@ -29,7 +28,7 @@ struct CarrierSelectionRowView: View {
         Image(carrier.imageName)
             .resizable()
             .frame(width: 38, height: 38)
-            .cornerRadius(12)
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     
     private var textPart: some View {
@@ -39,7 +38,7 @@ struct CarrierSelectionRowView: View {
             if let connectingStation = carrier.connectingStation {
                 Text(connectingStation)
                     .font(.regular12)
-                    .foregroundColor(.appRed)
+                    .foregroundStyle(.appRed)
             }
         }
     }
@@ -48,7 +47,7 @@ struct CarrierSelectionRowView: View {
         HStack(alignment: .top) {
             Text(carrier.carrierName)
                 .font(.regular17)
-                .foregroundColor(.appBlack)
+                .foregroundStyle(.appBlack)
             
             Spacer()
             
@@ -56,25 +55,25 @@ struct CarrierSelectionRowView: View {
                 Text(carrier.date)
                     .font(.regular12)
                     .padding(.top, 1)
-                    .foregroundColor(.appBlack)
+                    .foregroundStyle(.appBlack)
             }
             
         }
     }
     
     private var lowRowPart: some View {
-        HStack(alignment: .center, spacing: 4) {
+        HStack(spacing: 4) {
             Text(carrier.startTime)
                 .font(.regular17)
-                .foregroundColor(.appBlack)
+                .foregroundStyle(.appBlack)
             line
             Text(carrier.duration)
                 .font(.regular12)
-                .foregroundColor(.appBlack)
+                .foregroundStyle(.appBlack)
             line
             Text(carrier.finishTime)
                 .font(.regular17)
-                .foregroundColor(.appBlack)
+                .foregroundStyle(.appBlack)
         }
         .padding(14)
         .frame(maxWidth: .infinity)
@@ -83,7 +82,7 @@ struct CarrierSelectionRowView: View {
     private var line: some View {
         Rectangle()
             .frame(height: 1)
-            .foregroundColor(.appGray)
+            .foregroundStyle(.appGray)
     }
 }
 

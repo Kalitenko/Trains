@@ -2,7 +2,7 @@ import SwiftUI
 
 struct BackButtonToolbarModifier: ViewModifier {
     let dismiss: DismissAction
-
+    
     func body(content: Content) -> some View {
         content
             .toolbar {
@@ -11,7 +11,7 @@ struct BackButtonToolbarModifier: ViewModifier {
                         dismiss()
                     } label: {
                         Image(systemName: "chevron.left")
-                            .foregroundColor(.appTextPrimary)
+                            .foregroundStyle(.appTextPrimary)
                     }
                 }
             }
@@ -30,7 +30,7 @@ private struct ExampleView: View {
         Text("Hello World!")
             .backButtonToolbar(dismiss)
     }
-        
+    
 }
 
 #Preview {

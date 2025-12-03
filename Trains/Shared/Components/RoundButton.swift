@@ -6,7 +6,7 @@ struct RoundButton: View {
     let size: CGFloat = 36
     let iconColor: Color
     let backgroundColor: Color
-
+    
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
@@ -23,9 +23,9 @@ struct RoundButton: View {
 #Preview {
     RoundButton(
         action: {
-        print("RoundButton tapped")
-    },
-    systemName: "arrow.counterclockwise",
+            print("RoundButton tapped")
+        },
+        systemName: "arrow.counterclockwise",
         iconColor: .yellow,
         backgroundColor: .green
     )

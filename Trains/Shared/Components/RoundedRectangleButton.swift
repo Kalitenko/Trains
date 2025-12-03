@@ -8,24 +8,24 @@ struct RoundedRectangleButton: View {
     let backgroundColor: Color
     var showDot: Bool = false
     let width: CGFloat?
-
+    
     var body: some View {
         Button(action: action) {
             HStack(spacing: 4) {
                 Text(title)
                     .font(.bold17)
-                    .foregroundColor(textColor)
+                    .foregroundStyle(textColor)
                 
                 if showDot {
                     Circle()
                         .frame(width: 8, height: 8)
-                        .foregroundColor(Color.red)
+                        .foregroundStyle(.appRed)
                 }
             }
             .padding(.vertical, 20)
             .frame(maxWidth: width ?? .infinity)
             .background(backgroundColor)
-            .cornerRadius(16)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
     }
 }

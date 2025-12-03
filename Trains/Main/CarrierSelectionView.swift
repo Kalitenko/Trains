@@ -10,35 +10,25 @@ struct CarrierSelectionView: View {
     @State private var showFilters = false
     
     @State private var selectedTimeRanges: Set<DepartureTimeRange> = []
-    @State private var selectedOption: TransferOption? = nil
+    @State private var selectedOption: TransferOption?
     
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack {
-                Text(title)
-                    .font(.bold24)
-                List(carriers, id: \.self) { carrier in
-                    Button {
-                        onSelect(carrier.carrierName)
-                    } label: {
-                        CarrierSelectionRowView(carrier: carrier)
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.appBackground)
-                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                    }
+                titleView
+                list
+            }
+            .background(Color.appBackground)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay {
+                if carriers.isEmpty {
+                    noOptionsText
                 }
-                .listStyle(.plain)
             }
-            .backButtonToolbar(dismiss)
             
-            PrimaryButton(title: "Уточнить время",
-                          action: {
-                showFilters = true
-            }
-                          , showDot: showDot()
-            )
+            .backButtonToolbar(dismiss)
+            button
         }
-        .appBackground()
         .fullScreenCover(isPresented: $showFilters) {
             NavigationStack {
                 FilterView(
@@ -49,8 +39,50 @@ struct CarrierSelectionView: View {
         }
     }
     
-    private func showDot() -> Bool {
-        return selectedOption != nil || !selectedTimeRanges.isEmpty
+    private var titleView: some View {
+        Text(title)
+            .font(.bold24)
+            .padding(.horizontal, 16)
+            .foregroundStyle(.appTextPrimary)
+    }
+    
+    private var noOptionsText: some View {
+        Text("Вариантов нет")
+            .font(.bold24)
+            .foregroundStyle(.appTextPrimary)
+    }
+    
+    private var list: some View {
+        
+        List(carriers, id: \.self) { carrier in
+            Button {
+                onSelect(carrier.carrierName)
+            } label: {
+                CarrierSelectionRowView(carrier: carrier)
+                
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.appBackground)
+            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+        }
+        
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+    }
+    
+    
+    private var button: some View {
+        PrimaryButton(
+            title: "Уточнить время",
+            action: {
+                showFilters = true
+            },
+            showDot: isDotShown
+        )
+    }
+    
+    private var isDotShown: Bool {
+        selectedOption != nil || !selectedTimeRanges.isEmpty
     }
 }
 

@@ -7,31 +7,30 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundColor(.appGray)
+                .foregroundStyle(.appGray)
             
             TextField("Поиск", text: $text, prompt:
-                        Text(searchPlaceholder).font(.regular17).foregroundColor(.appGray)
+                        Text(searchPlaceholder).font(.regular17).foregroundStyle(.appGray)
             )
-            .foregroundColor(.appTextPrimary)
+            .foregroundStyle(.appTextPrimary)
             .font(.regular17)
-                .textFieldStyle(.plain)
-                .foregroundStyle(.appSearchBar)
+            .textFieldStyle(.plain)
+            .foregroundStyle(.appSearchBar)
             
             if !text.isEmpty {
                 Button {
                     text = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.appGray)
+                        .foregroundStyle(.appGray)
                 }
             }
         }
         .padding(.vertical, 7)
         .padding(.horizontal, 8)
         .background(Color.appSearchBar)
-        .cornerRadius(10)
-        .padding(.horizontal, 16)
-        .padding(.bottom, 16)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .padding([.horizontal, .bottom], 16)
     }
 }
 

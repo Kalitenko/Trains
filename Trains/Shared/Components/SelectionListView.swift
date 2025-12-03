@@ -12,8 +12,7 @@ struct SelectionListView: View {
     @Environment(\.dismiss) private var dismiss
     
     var filteredItems: [String] {
-        if searchText.isEmpty { return items }
-        return items.filter { $0.localizedCaseInsensitiveContains(searchText) }
+        searchText.isEmpty ? items : items.filter { $0.localizedCaseInsensitiveContains(searchText)}
     }
     
     var body: some View {

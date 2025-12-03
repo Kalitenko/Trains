@@ -32,7 +32,7 @@ struct RoutePointsStackView: View {
             )
         }
         .background(Color.appWhite)
-        .cornerRadius(20)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
     
     init(whither whitherRoutePoint: RoutePoint,

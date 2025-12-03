@@ -9,11 +9,11 @@ struct ContactView: View {
         VStack(alignment: .leading, spacing: 0) {
             Text(title.rawValue)
                 .font(.regular17)
-                .foregroundColor(.appTextPrimary)
+                .foregroundStyle(.appTextPrimary)
             
             Text(subtitle)
                 .font(.regular12)
-                .foregroundColor(.appBlue)
+                .foregroundStyle(.appBlue)
         }
     }
 }

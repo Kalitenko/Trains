@@ -2,11 +2,10 @@ import SwiftUI
 
 struct CarrierInfoView: View {
     
-    let title = "Информация о перевозчике"
-    var imageName: String = "rzd_logo"
-    var carrierName: String = "ОАО «РЖД»"
-    var email: String = "i.lozgkina@yandex.ru"
-    var phone: String = "+7 (904) 329-27-71"
+    private var imageName: String = "rzd_logo"
+    private var carrierName: String = "ОАО «РЖД»"
+    private var email: String = "i.lozgkina@yandex.ru"
+    private var phone: String = "+7 (904) 329-27-71"
     
     @Environment(\.dismiss) private var dismiss
     
@@ -19,7 +18,7 @@ struct CarrierInfoView: View {
         }
         .padding(16)
         .appBackground()
-        .navigationTitle(title)
+        .navigationTitle("Информация о перевозчике")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .backButtonToolbar(dismiss)
@@ -29,7 +28,7 @@ struct CarrierInfoView: View {
     private var name: some View {
         Text(carrierName)
             .font(.bold24)
-            .foregroundColor(.appTextPrimary)
+            .foregroundStyle(.appTextPrimary)
     }
     
     private var contacts: some View {
@@ -46,5 +45,4 @@ struct CarrierInfoView: View {
             .border(Color.red)
     }
     .preferredColorScheme(.dark)
-    
 }
