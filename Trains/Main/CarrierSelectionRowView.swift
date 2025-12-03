@@ -48,6 +48,7 @@ struct CarrierSelectionRowView: View {
         HStack(alignment: .top) {
             Text(carrier.carrierName)
                 .font(.regular17)
+                .foregroundColor(.appBlack)
             
             Spacer()
             
@@ -55,6 +56,7 @@ struct CarrierSelectionRowView: View {
                 Text(carrier.date)
                     .font(.regular12)
                     .padding(.top, 1)
+                    .foregroundColor(.appBlack)
             }
             
         }

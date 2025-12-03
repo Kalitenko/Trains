@@ -1,6 +1,6 @@
 struct RoutePoint {
-    let settlement: String
-    let station: String
+    var settlement: String
+    var station: String
     
     init(settlement: String, station: String) {
         self.settlement = settlement

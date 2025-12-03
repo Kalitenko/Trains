@@ -1,21 +1,10 @@
 import SwiftUI
 
-enum DepartureTimeRange: String, CaseIterable {
-    case morning = "Утро 06:00 - 12:00"
-    case day = "День 12:00 - 18:00"
-    case evening = "Вечер 18:00 - 00:00"
-    case night = "Ночь 00:00 - 06:00"
-}
-
-enum TransferOption: String, CaseIterable {
-    case yes = "Да"
-    case no = "Нет"
-}
-
 struct FilterView: View {
     
-    @State private var selectedTimeRanges: Set<DepartureTimeRange> = []
-    @State private var selectedOption: TransferOption? = nil
+    @Binding var selectedTimeRanges: Set<DepartureTimeRange>
+    @Binding var selectedOption: TransferOption?
+    @Environment(\.dismiss) private var dismiss
     
     private var buttonIsEnabled: Bool {
         !selectedTimeRanges.isEmpty || selectedOption != nil
@@ -26,11 +15,12 @@ struct FilterView: View {
             departureTimeSection
             transferSection
         }
+        .backButtonToolbar(dismiss)
         Spacer()
         if buttonIsEnabled {
             PrimaryButton(title: "Применить",
                           action: {
-                print("Применить tapped")
+                dismiss()
             })
             .padding(.bottom, 24)
         }
@@ -78,5 +68,7 @@ struct FilterView: View {
 }
 
 #Preview {
-    FilterView()
+    NavigationStack {
+        FilterView(selectedTimeRanges:  .constant([]), selectedOption:  .constant(nil))
+    }
 }

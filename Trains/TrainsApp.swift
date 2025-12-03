@@ -1,10 +1,13 @@
 import SwiftUI
 
 @main
-struct TrainsApp: App {    
+struct TrainsApp: App {
     var body: some Scene {
         WindowGroup {
-            FilterView()
+            NavigationStack {
+                MainView()
+            }
+            .appBackground()
         }
     }
 }

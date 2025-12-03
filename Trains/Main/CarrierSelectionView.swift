@@ -5,18 +5,47 @@ struct CarrierSelectionView: View {
     let title: String
     let carriers: [Carrier]
     
+    @Environment(\.dismiss) private var dismiss
+    @State private var showFilters = false
+    
+    @State private var selectedTimeRanges: Set<DepartureTimeRange> = []
+    @State private var selectedOption: TransferOption? = nil
+    
     var body: some View {
-        VStack {
-            Text(title)
-                .font(.bold24)
-            List(carriers, id: \.self) { carrier in
-                CarrierSelectionRowView(carrier: carrier)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.appBackground)
-                    .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+        ZStack(alignment: .bottom) {
+            VStack {
+                Text(title)
+                    .font(.bold24)
+                List(carriers, id: \.self) { carrier in
+                    CarrierSelectionRowView(carrier: carrier)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.appBackground)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
+            .backButtonToolbar(dismiss)
+            
+            PrimaryButton(title: "Уточнить время",
+                          action: {
+                showFilters = true
+            }
+                          , showDot: showDot()
+            )
         }
+        .appBackground()
+        .fullScreenCover(isPresented: $showFilters) {
+            NavigationStack {
+                FilterView(
+                    selectedTimeRanges: $selectedTimeRanges,
+                    selectedOption: $selectedOption
+                )
+            }
+        }
+    }
+    
+    private func showDot() -> Bool {
+        return selectedOption != nil || !selectedTimeRanges.isEmpty
     }
 }
 
@@ -36,9 +65,10 @@ struct CarrierSelectionView: View {
         Carrier(carrierName: "1234", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
                 date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd")
     ]
-    
-    CarrierSelectionView(
-        title: "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)",
-        carriers: carriers
-    )
+    NavigationStack {
+        CarrierSelectionView(
+            title: "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)",
+            carriers: carriers
+        )
+    }
 }
