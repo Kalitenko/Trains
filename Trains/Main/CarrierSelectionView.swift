@@ -74,11 +74,10 @@ struct CarrierSelectionView: View {
     private var button: some View {
         PrimaryButton(
             title: "Уточнить время",
-            action: {
-                showFilters = true
-            },
             showDot: isDotShown
-        )
+        ) {
+            showFilters = true
+        }
     }
     
     private var isDotShown: Bool {

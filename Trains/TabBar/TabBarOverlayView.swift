@@ -39,9 +39,7 @@ struct TabBarOverlayView: View {
     }
     
     private var line: some View {
-        Rectangle()
-            .frame(height: 0.5)
-            .foregroundStyle(.appSeparator)
+        Line(color: .appSeparator, height: 0.5)
     }
 }
 

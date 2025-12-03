@@ -80,9 +80,7 @@ struct CarrierSelectionRowView: View {
     }
     
     private var line: some View {
-        Rectangle()
-            .frame(height: 1)
-            .foregroundStyle(.appGray)
+        Line(color: .appGray, height: 1)
     }
 }
 

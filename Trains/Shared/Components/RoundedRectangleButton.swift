@@ -3,11 +3,11 @@ import SwiftUI
 struct RoundedRectangleButton: View {
     
     let title: String
-    let action: () -> Void
     let textColor: Color
     let backgroundColor: Color
     var showDot: Bool = false
     let width: CGFloat?
+    let action: () -> Void
     
     var body: some View {
         Button(action: action) {
@@ -34,27 +34,25 @@ struct RoundedRectangleButton: View {
     VStack(spacing: 20) {
         RoundedRectangleButton(
             title: "Just button",
-            action: {
-                print("RoundedRectangleButton tapped")
-            },
             textColor: Color.blue,
             backgroundColor: Color.gray,
             showDot: true,
             width: nil
-        )
+        ) {
+            print("RoundedRectangleButton tapped")
+        }
         .padding(10)
         .background(Color.yellow)
         
         RoundedRectangleButton(
             title: "Just button",
-            action: {
-                print("RoundedRectangleButton tapped")
-            },
             textColor: Color.blue,
             backgroundColor: Color.gray,
             showDot: false,
             width: 150
-        )
+        ) {
+            print("RoundedRectangleButton tapped")
+        }
         .padding(10)
         .background(Color.yellow)
     }

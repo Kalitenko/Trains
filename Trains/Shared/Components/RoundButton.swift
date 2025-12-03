@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct RoundButton: View {
-    let action: () -> Void
     let systemName: String
     let size: CGFloat = 36
     let iconColor: Color
     let backgroundColor: Color
+    let action: () -> Void
     
     var body: some View {
         Button(action: action) {
@@ -22,12 +22,12 @@ struct RoundButton: View {
 
 #Preview {
     RoundButton(
-        action: {
-            print("RoundButton tapped")
-        },
         systemName: "arrow.counterclockwise",
         iconColor: .yellow,
-        backgroundColor: .green
+        backgroundColor: .green,
+        action: {
+            print("RoundButton tapped")
+        }
     )
     .border(Color.red, width: 2)
 }

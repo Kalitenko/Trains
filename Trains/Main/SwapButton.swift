@@ -6,18 +6,18 @@ struct SwapButton: View {
     
     var body: some View {
         RoundButton(
-            action: action,
             systemName: "arrow.2.squarepath",
             iconColor: .appBlue,
-            backgroundColor: .appWhite)
+            backgroundColor: .appWhite) {
+                action()
+            }
     }
-    
 }
 
 #Preview {
-    SwapButton(action: {
+    SwapButton {
         print("SwapButton tapped")
-    })
+    }
     .padding(10)
     .background(Color.yellow)
 }

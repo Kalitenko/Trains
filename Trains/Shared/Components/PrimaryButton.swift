@@ -3,11 +3,11 @@ import SwiftUI
 struct PrimaryButton: View {
     
     let title: String
-    let action: () -> Void
     var showDot: Bool = false
     let width: CGFloat?
+    let action: () -> Void
     
-    init(title: String, action: @escaping () -> Void, showDot: Bool = false, width: CGFloat? = nil) {
+    init(title: String, showDot: Bool = false, width: CGFloat? = nil, action: @escaping () -> Void) {
         self.title = title
         self.action = action
         self.showDot = showDot
@@ -17,12 +17,13 @@ struct PrimaryButton: View {
     var body: some View {
         RoundedRectangleButton(
             title: title,
-            action: action,
             textColor: Color.appWhite,
             backgroundColor: Color.appBlue,
             showDot: showDot,
-            width: width)
-        .padding(.horizontal, width == nil ? 16 : 0)
+            width: width) {
+                action()
+            }
+            .padding(.horizontal, width == nil ? 16 : 0)
     }
 }
 
@@ -30,32 +31,31 @@ struct PrimaryButton: View {
     VStack(spacing: 20) {
         PrimaryButton(
             title: "Уточнить время",
+            showDot: true,
             action: {
                 print("Уточнить время tapped")
-            },
-            showDot: true,
-            width: nil
+            }
         )
         .padding(10)
         .background(Color.yellow)
         
         PrimaryButton(
             title: "Уточнить время",
+            showDot: false,
+            width: nil,
             action: {
                 print("Уточнить время tapped")
-            },
-            showDot: false,
-            width: nil
+            }
         )
         .padding(10)
         .background(Color.yellow)
         
         PrimaryButton(
             title: "Найти",
+            width: 150,
             action: {
                 print("Найти tapped")
-            },
-            width: 150
+            }
         )
         .padding(10)
         .background(Color.gray)

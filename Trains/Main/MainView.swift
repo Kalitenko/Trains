@@ -60,11 +60,10 @@ struct MainView: View {
             
             PrimaryButton(
                 title: "Найти",
-                action: {
+                width: 150) {
                     showCarriers = true
-                },
-                width: 150)
-            .opacity(buttonIsEnabled ? 1 : 0)
+                }
+                .opacity(buttonIsEnabled ? 1 : 0)
             
             Spacer()
         }
