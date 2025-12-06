@@ -16,18 +16,18 @@ struct ContentView: View {
         .onAppear {
             let date = Date()
             let formattedDateString = date.ISO8601DateString
-            testFetchStations()
-            testFetchCopyright()
-            testFetchScheduleBetweenStations()
-            testFetchScheduleBetweenStationsForDate(formattedDateString: formattedDateString)
-            testFetchStationSchedule()
-            testFetchStationScheduleForDate(formattedDateString: formattedDateString)
-            testFetchRouteStations()
-            testFetchRouteStationsForDate(formattedDateString: formattedDateString)
-            testFetchNearestCity()
-            testFetchCarrierInfo()
-            testFetchCarrierInfoIATA()
-            testFetchAllStations()
+//            testFetchStations()
+//            testFetchCopyright()
+//            testFetchScheduleBetweenStations()
+//            testFetchScheduleBetweenStationsForDate(formattedDateString: formattedDateString)
+//            testFetchStationSchedule()
+//            testFetchStationScheduleForDate(formattedDateString: formattedDateString)
+//            testFetchRouteStations()
+//            testFetchRouteStationsForDate(formattedDateString: formattedDateString)
+//            testFetchNearestCity()
+//            testFetchCarrierInfo()
+//            testFetchCarrierInfoIATA()
+//            testFetchAllStations()
         }
     }
     
