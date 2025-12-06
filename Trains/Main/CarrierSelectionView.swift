@@ -70,6 +70,7 @@ struct CarrierSelectionView: View {
         
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .padding(.bottom, 80)
     }
     
     

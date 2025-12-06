@@ -17,6 +17,8 @@ struct TabBarView: View {
                     EmptyView()
                 }
         }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .ignoresSafeArea(.all, edges: .all)
         .overlay(alignment: .bottom) {
             TabBarOverlayView(selectedTab: $selectedTab)
         }
@@ -26,4 +28,5 @@ struct TabBarView: View {
 
 #Preview {
     TabBarView()
+        .preferredColorScheme(ColorScheme.dark)
 }
