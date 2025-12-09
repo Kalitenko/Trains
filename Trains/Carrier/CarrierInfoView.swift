@@ -12,7 +12,7 @@ struct CarrierInfoView: View {
     var body: some View {
         ParentContainer {
             VStack(alignment: .leading, spacing: 16) {
-                Image(imageName)
+                image
                 name
                 contacts
                 Spacer()
@@ -26,6 +26,12 @@ struct CarrierInfoView: View {
         }
     }
     
+    private var image: some View {
+        Image(imageName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(maxWidth: .infinity)
+    }
     
     private var name: some View {
         Text(carrierName)
@@ -47,4 +53,12 @@ struct CarrierInfoView: View {
             .border(Color.red)
     }
     .preferredColorScheme(.dark)
+}
+
+#Preview("carrier logo") {
+    Image(.fgk)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 16)
 }
