@@ -7,7 +7,7 @@ struct ErrorOverlayModifier: ViewModifier {
     func body(content: Content) -> some View {
         ZStack {
             content
-                .opacity(error == nil ? 1 : 0) // или убрать, если надо оставить позади
+                .opacity(error == nil ? 1 : 0)
             
             if let error {
                 ErrorView(type: error)

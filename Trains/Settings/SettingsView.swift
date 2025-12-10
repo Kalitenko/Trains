@@ -29,6 +29,8 @@ struct SettingsView: View {
     private var userAgreement: some View {
         NavigationLink {
             AgreementView()
+                .navigationTitle(Text("Пользовательское соглашение"))
+                .navigationBarTitleDisplayMode(.inline)
         } label: {
             HStack {
                 Text("Пользовательское соглашение")

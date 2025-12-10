@@ -4,11 +4,15 @@ struct AgreementView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    private let agreementURL = URL(string: "https://yandex.ru/legal/practicum_offer/ru/")!
+    
     var body: some View {
-        Text("Agreement View!")
-        .navigationBarBackButtonHidden(true)
-        .appBackground()
-        .backButtonToolbar(dismiss)
+        ParentContainer {
+            WebView(url: agreementURL)
+                .navigationBarBackButtonHidden(true)
+                .appBackground()
+                .backButtonToolbar(dismiss)
+        }
     }
 }
 
