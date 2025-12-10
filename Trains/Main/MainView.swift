@@ -11,6 +11,8 @@ struct MainView: View {
     @State private var showCarriers = false
     @State private var showCarrierInfo = false
     
+    @State private var stories = StoriesViewModel().stories
+    
     private var buttonIsEnabled: Bool {
         !whither.settlement.isEmpty && !whence.settlement.isEmpty
         && !whither.station.isEmpty && !whence.station.isEmpty
@@ -18,58 +20,72 @@ struct MainView: View {
     
     var body: some View {
         ParentContainer {
-            VStack(spacing: 16) {
-                RoutePointsSelectionView(
-                    whither: $whither,
-                    whence: $whence,
-                    whitherAction: {
-                        isWhitherFlow = true
-                        showFlow = true
-                    },
-                    whenceAction: {
-                        isWhitherFlow = false
-                        showFlow = true
-                    },
-                    swapAction: { swap() }
-                )
-                .padding(.horizontal, 16)
-                .fullScreenCover(isPresented: $showFlow) {
-                    FlowView { settlement, station in
-                        if isWhitherFlow {
-                            whither.settlement = settlement
-                            whither.station = station
-                        } else {
-                            whence.settlement = settlement
-                            whence.station = station
-                        }
-                        showFlow = false
-                    }
-                }
-                .fullScreenCover(isPresented: $showCarriers) {
-                    let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
-                    NavigationStack {
-                        CarrierSelectionView(title: title, carriers: carriers) { carrierName in
-                            Logger.info("Выбран \(carrierName)")
-                            showCarrierInfo = true
-                        }
-                        .navigationDestination(isPresented: $showCarrierInfo) {
-                            CarrierInfoView()
+            VStack(spacing: 0) {
+                storyCollectionView
+                    .padding(.vertical, 24)
+                routePointsSelectionView
+                    .padding(.top, 20)
+                    .fullScreenCover(isPresented: $showFlow) {
+                        FlowView { settlement, station in
+                            if isWhitherFlow {
+                                whither.settlement = settlement
+                                whither.station = station
+                            } else {
+                                whence.settlement = settlement
+                                whence.station = station
+                            }
+                            showFlow = false
                         }
                     }
-                }
-                .padding(.top, 20)
-                
-                PrimaryButton(
-                    title: "Найти",
-                    width: 150) {
-                        showCarriers = true
+                    .fullScreenCover(isPresented: $showCarriers) {
+                        let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
+                        NavigationStack {
+                            CarrierSelectionView(title: title, carriers: carriers) { carrierName in
+                                Logger.info("Выбран \(carrierName)")
+                                showCarrierInfo = true
+                            }
+                            .navigationDestination(isPresented: $showCarrierInfo) {
+                                CarrierInfoView()
+                            }
+                        }
                     }
-                    .opacity(buttonIsEnabled ? 1 : 0)
+                button
+                    .padding(.top, 16)
                 
                 Spacer()
             }
+            .padding(.horizontal, 16)
             .appBackground()
         }
+    }
+    
+    private var storyCollectionView: some View {
+        StoryCollectionView(stories: $stories)
+    }
+    
+    private var routePointsSelectionView: some View {
+        RoutePointsSelectionView(
+            whither: $whither,
+            whence: $whence,
+            whitherAction: {
+                isWhitherFlow = true
+                showFlow = true
+            },
+            whenceAction: {
+                isWhitherFlow = false
+                showFlow = true
+            },
+            swapAction: { swap() }
+        )
+    }
+    
+    private var button: some View {
+        PrimaryButton(
+            title: "Найти",
+            width: 150) {
+                showCarriers = true
+            }
+            .opacity(buttonIsEnabled ? 1 : 0)
     }
     
     private func swap() {
