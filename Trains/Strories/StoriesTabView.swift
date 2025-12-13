@@ -8,6 +8,8 @@ struct StoriesTabView: View {
         TabView(selection: $currentStoryIndex) {
             ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
                 StoryView(story: story)
+                    .zIndex(index == currentStoryIndex ? 1 : 0)
+                    .id(index)
                     .tag(index)
                     .horizontalStorySwipe(
                         onLeft: { didTapPrev() },

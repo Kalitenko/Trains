@@ -9,6 +9,8 @@ struct StoriesContentView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    @State private var animate: Bool = false
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             StoriesView(stories: stories, currentStoryIndex: $currentStoryIndex) {
@@ -49,6 +51,13 @@ struct StoriesContentView: View {
                 dismiss()
             }
         )
+        .opacity(animate ? 1 : 0)
+        .scaleEffect(animate ? 1.0 : 10.0)
+        .rotationEffect(.degrees(animate ? 360 : 0))
+        .animation(.easeInOut(duration: 2), value: animate)
+        .onAppear {
+            animate = true
+        }
     }
 }
 
