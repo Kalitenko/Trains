@@ -16,13 +16,13 @@ import SwiftUI
     }
     
     private func initPreviews() {
-        previews = [.preview1, .preview2, .preview3, .preview4, .preview5, .preview6, .preview7]
+        previews = [.preview1, .preview2, .preview3, .preview4, .preview5, .preview6, .preview7, .preview8, .preview9]
     }
     
     private func initStoryPictures() {
         storyPictures = [
-            .story1, .story2, .story3, .story4, .story5, .story6, .story7,
-            .story8, .story9, .story10, .story11, .story12, .story13, .story14
+            .story1, .story2, .story3, .story4, .story5, .story6, .story7, .story8, .story9,
+            .story10, .story11, .story12, .story13, .story14, .story15, .story16, .story17, .story18
         ]
     }
     

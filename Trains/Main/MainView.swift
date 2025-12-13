@@ -12,6 +12,8 @@ struct MainView: View {
     @State private var showCarrierInfo = false
     
     @State private var stories = StoriesViewModel().stories
+    @State private var showStories = false
+    @State private var selectedStoryIndex = 0
     
     private var buttonIsEnabled: Bool {
         !whither.settlement.isEmpty && !whence.settlement.isEmpty
@@ -49,6 +51,14 @@ struct MainView: View {
                             }
                         }
                     }
+                    .fullScreenCover(isPresented: $showStories) {
+                        StoriesContentView(
+                            stories: stories,
+                            currentStoryIndex: $selectedStoryIndex
+                        ) {
+                            markStoryViewed(at: $0)
+                        }
+                    }
                 button
                     .padding(.top, 16)
                 
@@ -60,7 +70,10 @@ struct MainView: View {
     }
     
     private var storyCollectionView: some View {
-        StoryCollectionView(stories: $stories)
+        StoryCollectionView(stories: $stories) { index in
+            selectedStoryIndex = index
+            showStories = true
+        }
     }
     
     private var routePointsSelectionView: some View {
@@ -92,6 +105,10 @@ struct MainView: View {
         let temp = whither
         whither = whence
         whence = temp
+    }
+    
+    private func markStoryViewed(at index: Int) {
+        stories[index].isViewed = true
     }
     
     let carriers: [Carrier] = [
