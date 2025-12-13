@@ -34,6 +34,7 @@ import SwiftUI
             let images = Array(storyPictures[left...right])
             
             return Story(
+                id: UUID(),
                 title: title,
                 description: description,
                 preview: preview,

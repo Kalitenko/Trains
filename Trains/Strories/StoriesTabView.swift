@@ -3,22 +3,22 @@ import SwiftUI
 struct StoriesTabView: View {
     let stories: [Story]
     @Binding var currentStoryIndex: Int
-
+    
     var body: some View {
         TabView(selection: $currentStoryIndex) {
-            ForEach(Array(stories.enumerated()), id: \.element) { index, story in
+            ForEach(Array(stories.enumerated()), id: \.element.id) { index, story in
                 StoryView(story: story)
                     .tag(index)
                     .horizontalStorySwipe(
                         onLeft: { didTapPrev() },
                         onRight: { didTapNext() }
-                        )
+                    )
                     .overlay {
                         HStack {
                             Color.clear
                                 .contentShape(Rectangle())
                                 .onTapGesture { didTapPrev() }
-
+                            
                             Color.clear
                                 .contentShape(Rectangle())
                                 .onTapGesture { didTapNext() }
@@ -40,7 +40,24 @@ struct StoriesTabView: View {
     }
 }
 
+
+#Preview {
+    PreviewWrapper()
+}
+
+private struct PreviewWrapper: View {
+    @State var stories = StoriesViewModel().stories
+    @State var index = 5
+    
+    var body: some View {
+        StoriesTabView(
+            stories: stories,
+            currentStoryIndex: $index
+        )
+    }
+}
+
 #Preview {
     let stories: [Story] = StoriesViewModel().stories
-    StoriesTabView(stories: stories, currentStoryIndex: .constant(0))
+    StoriesTabView(stories: stories, currentStoryIndex: .constant(3))
 }

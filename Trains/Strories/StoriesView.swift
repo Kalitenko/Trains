@@ -2,15 +2,22 @@ import SwiftUI
 
 struct StoriesView: View {
     
-    var stories: [Story] = []
+    let stories: [Story]
     private var timerConfiguration: TimerConfiguration { .init(storiesCount: stories.count) }
     @Binding var currentStoryIndex: Int
-    @State var currentProgress: CGFloat = 0
+    @State var currentProgress: CGFloat
+    let onFinished: () -> Void
     
-    init(stories: [Story], currentStoryIndex: Binding<Int>) {
+    private var progress: CGFloat { CGFloat(currentStoryIndex) / CGFloat(stories.count) }
+    
+    init(stories: [Story], currentStoryIndex: Binding<Int>, onFinished: @escaping () -> Void) {
         self.stories = stories
         self._currentStoryIndex = currentStoryIndex
-        print("currentStoryIndex: \(currentStoryIndex)")
+        self.onFinished = onFinished
+        let initialProgress = TimerConfiguration(storiesCount: stories.count)
+            .progress(for: currentStoryIndex.wrappedValue)
+        
+        self._currentProgress = State(initialValue: initialProgress)
     }
     
     var body: some View {
@@ -42,6 +49,17 @@ struct StoriesView: View {
     }
     
     private func didChangeCurrentProgress(newProgress: CGFloat) {
+        let lastIndex = stories.count - 1
+        
+        let lastStoryEndProgress = 1.0
+        
+        if currentStoryIndex == lastIndex {
+            if newProgress >= lastStoryEndProgress {
+                onFinished()
+            }
+            return
+        }
+        
         let index = timerConfiguration.index(for: newProgress)
         guard index != currentStoryIndex else { return }
         withAnimation {
@@ -51,9 +69,19 @@ struct StoriesView: View {
 }
 
 #Preview {
-    let stories: [Story] = StoriesViewModel().stories
-    StoriesView(
-        stories: stories, currentStoryIndex: .constant(0)
-    )
+    PreviewWrapper()
+}
+
+private struct PreviewWrapper: View {
+    @State var stories = StoriesViewModel().stories
+    @State var index = 3
+    @State var isFinished = false
     
+    var body: some View {
+        StoriesView(
+            stories: stories,
+            currentStoryIndex: $index,
+            onFinished: { print ("Finished")}
+        )
+    }
 }

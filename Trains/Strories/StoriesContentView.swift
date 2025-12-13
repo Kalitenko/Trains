@@ -2,7 +2,7 @@ import SwiftUI
 
 struct StoriesContentView: View {
     
-    var stories: [Story] = []
+    let stories: [Story]
     @Binding var currentStoryIndex: Int
     
     var onViewed: (Int) -> Void
@@ -11,10 +11,15 @@ struct StoriesContentView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            StoriesView(stories: stories, currentStoryIndex: $currentStoryIndex)
-                .onChange(of: currentStoryIndex) { _, newIndex in
-                    onViewed(newIndex)
-                }
+            StoriesView(stories: stories, currentStoryIndex: $currentStoryIndex) {
+                dismiss()
+            }
+            .onAppear {
+                onViewed(currentStoryIndex)
+            }
+            .onChange(of: currentStoryIndex) { _, oldIndex in
+                onViewed(oldIndex)
+            }
             closeButton
                 .padding(.top, 57)
                 .padding(.trailing, 12)
@@ -29,7 +34,6 @@ struct StoriesContentView: View {
                     
                     if dy < -40 {
                         dismiss()
-                        print("dismiss")
                     }
                 }
         )
@@ -44,6 +48,40 @@ struct StoriesContentView: View {
             action: {
                 dismiss()
             }
+        )
+    }
+}
+
+#Preview {
+    PreviewWrapper()
+}
+
+private struct PreviewWrapper: View {
+    @State var stories = StoriesViewModel().stories
+    @State var index = 0
+    
+    var body: some View {
+        StoriesContentView(
+            stories: stories,
+            currentStoryIndex: $index,
+            onViewed: { index in print("Viewed story at: \(index)")}
+        )
+    }
+}
+
+#Preview("short") {
+    PreviewWrapperShort()
+}
+
+private struct PreviewWrapperShort: View {
+    let stories: [Story] = [StoriesViewModel().stories[0], StoriesViewModel().stories[1]]
+    @State var index = 0
+    
+    var body: some View {
+        StoriesContentView(
+            stories: stories,
+            currentStoryIndex: $index,
+            onViewed: { index in print("Viewed story at: \(index)")}
         )
     }
 }

@@ -44,19 +44,22 @@ struct StoryCollectionCell: View {
 }
 
 #Preview {
-    let story1 = Story(title: "Title",
+    let story1 = Story(id: UUID(),
+                       title: "Title",
                       description: "Description",
                       preview: .preview7,
                       images: [.story13, .story14],
                       isViewed: false
     )
-    let story2 = Story(title: "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title ",
+    let story2 = Story(id: UUID(),
+                       title: "Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title Title ",
                       description: "Description",
                       preview: .preview8,
                       images: [.story15, .story16],
                       isViewed: true
     )
-    let story3 = Story(title: "Title",
+    let story3 = Story(id: UUID(),
+                       title: "Title",
                       description: "Description",
                       preview: .preview9,
                       images: [.story17, .story18],
