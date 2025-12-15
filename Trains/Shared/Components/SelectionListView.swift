@@ -10,13 +10,14 @@ struct SelectionListView: View {
     
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
+    @State private var error: ErrorType? = nil
     
     var filteredItems: [String] {
         searchText.isEmpty ? items : items.filter { $0.localizedCaseInsensitiveContains(searchText)}
     }
     
     var body: some View {
-        ParentContainer {
+        ParentContainer(error: $error) {
             VStack(spacing: 0) {
                 SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
                 List(filteredItems, id: \.self) { item in

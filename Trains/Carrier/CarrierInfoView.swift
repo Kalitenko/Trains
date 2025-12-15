@@ -7,10 +7,11 @@ struct CarrierInfoView: View {
     private var email: String = "i.lozgkina@yandex.ru"
     private var phone: String = "+7 (904) 329-27-71"
     
+    @State private var error: ErrorType? = nil
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        ParentContainer {
+        ParentContainer(error: $error) {
             VStack(alignment: .leading, spacing: 16) {
                 image
                 name

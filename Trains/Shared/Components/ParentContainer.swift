@@ -1,8 +1,13 @@
 import SwiftUI
 
 struct ParentContainer<Content: View>: View {
-    @State private var error: ErrorType? = nil
-    let content: () -> Content
+    @Binding var error: ErrorType?
+    @ViewBuilder let content: () -> Content
+
+    init(error: Binding<ErrorType?>, @ViewBuilder content: @escaping () -> Content) {
+        self._error = error
+        self.content = content
+    }
 
     var body: some View {
         content()

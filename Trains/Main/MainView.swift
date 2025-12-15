@@ -14,6 +14,7 @@ struct MainView: View {
     @State private var stories = StoriesViewModel().stories
     @State private var showStories = false
     @State private var selectedStoryIndex = 0
+    @State private var error: ErrorType? = nil
     
     private var buttonIsEnabled: Bool {
         !whither.settlement.isEmpty && !whence.settlement.isEmpty
@@ -21,7 +22,7 @@ struct MainView: View {
     }
     
     var body: some View {
-        ParentContainer {
+        ParentContainer(error: $error) {
             VStack(spacing: 0) {
                 storyCollectionView
                     .padding(.vertical, 24)

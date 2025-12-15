@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     
-    @AppStorage("isDarkTheme") private var isDarkTheme: Bool = false
+    @AppStorage(AppStorageKey.isDarkTheme.rawValue) private var isDarkTheme: Bool = false
     
     var body: some View {
         VStack {

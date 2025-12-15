@@ -30,7 +30,7 @@ struct StoryCollectionCell: View {
     private var text: some View {
         Text(story.title)
             .font(.regular12)
-            .foregroundColor(.appWhite)
+            .foregroundStyle(.appWhite)
             .lineLimit(3)
             .padding(.horizontal, 8)
             .padding(.bottom, 12)

@@ -11,9 +11,10 @@ struct CarrierSelectionView: View {
     
     @State private var selectedTimeRanges: Set<DepartureTimeRange> = []
     @State private var selectedOption: TransferOption?
+    @State private var error: ErrorType? = nil
     
     var body: some View {
-        ParentContainer {
+        ParentContainer(error: $error) {
             ZStack(alignment: .bottom) {
                 VStack {
                     titleView

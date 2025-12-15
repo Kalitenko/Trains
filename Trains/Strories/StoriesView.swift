@@ -5,7 +5,7 @@ struct StoriesView: View {
     let stories: [Story]
     private var timerConfiguration: TimerConfiguration { .init(storiesCount: stories.count) }
     @Binding var currentStoryIndex: Int
-    @State var currentProgress: CGFloat
+    @State private var currentProgress: CGFloat
     let onFinished: () -> Void
     
     private var progress: CGFloat { CGFloat(currentStoryIndex) / CGFloat(stories.count) }

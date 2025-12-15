@@ -6,7 +6,7 @@ struct StoryCollectionView: View {
     let onTapStory: (Int) -> Void
     
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+        ScrollView(.horizontal) {
             LazyHStack(spacing: 12) {
                 ForEach(stories.indices, id: \.self) { index in
                     StoryCollectionCell(story: stories[index])
@@ -17,6 +17,7 @@ struct StoryCollectionView: View {
             }
             .frame(height: Constants.cellHeight)
         }
+        .scrollIndicators(.hidden)
     }
 }
 

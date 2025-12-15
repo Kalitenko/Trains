@@ -58,14 +58,14 @@ struct StoryView: View {
     private var title: some View {
         Text(story.title)
             .font(.bold34)
-            .foregroundColor(.appWhite)
+            .foregroundStyle(.appWhite)
             .lineLimit(2)
     }
     
     private var description: some View {
         Text(story.description)
             .font(.regular20)
-            .foregroundColor(.appWhite)
+            .foregroundStyle(.appWhite)
             .lineLimit(3)
     }
 }
