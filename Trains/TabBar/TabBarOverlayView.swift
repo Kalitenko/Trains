@@ -16,7 +16,7 @@ struct TabBarOverlayView: View {
                 Spacer()
             }
         }
-        .frame(height: 49)
+        .frame(height: Constants.customTabBarHeight)
         .padding(.bottom, 4)
     }
     

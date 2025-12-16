@@ -3,11 +3,13 @@ import SwiftUI
 enum ErrorType {
     case serverError
     case noInternet
+    case configurationError
     
     var imageResource: ImageResource {
         switch self {
         case .serverError: .serverError
         case .noInternet: .noInternet
+        case .configurationError: .configurationError
         }
     }
     
@@ -15,6 +17,7 @@ enum ErrorType {
         switch self {
         case .serverError: "Ошибка сервера"
         case .noInternet: "Нет интернета"
+        case .configurationError: "Что-то пошло не так"
         }
     }
 }
@@ -35,9 +38,11 @@ struct ErrorView: View {
         VStack(spacing: 16) {
             Image(type.imageResource)
                 .resizable()
-                .scaledToFit()
+                .scaledToFill()
                 .frame(width: side ?? defaultSide,
                        height: side ?? defaultSide)
+                .clipShape(RoundedRectangle(cornerRadius: 70))
+            
             
             Text(type.text)
                 .font(.bold24)
@@ -58,6 +63,10 @@ struct ErrorView: View {
 
 #Preview("No Internet") {
     ErrorView(type: .noInternet)
+}
+
+#Preview("Configuration error") {
+    ErrorView(type: .configurationError)
 }
 
 

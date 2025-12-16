@@ -7,12 +7,13 @@ struct CarrierInfoView: View {
     private var email: String = "i.lozgkina@yandex.ru"
     private var phone: String = "+7 (904) 329-27-71"
     
+    @State private var error: ErrorType? = nil
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        ParentContainer {
+        ParentContainer(error: $error) {
             VStack(alignment: .leading, spacing: 16) {
-                Image(imageName)
+                image
                 name
                 contacts
                 Spacer()
@@ -26,6 +27,12 @@ struct CarrierInfoView: View {
         }
     }
     
+    private var image: some View {
+        Image(imageName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(maxWidth: .infinity)
+    }
     
     private var name: some View {
         Text(carrierName)
@@ -47,4 +54,12 @@ struct CarrierInfoView: View {
             .border(Color.red)
     }
     .preferredColorScheme(.dark)
+}
+
+#Preview("carrier logo") {
+    Image(.fgk)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 16)
 }

@@ -18,7 +18,7 @@ struct TabBarView: View {
                 }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .ignoresSafeArea(.all, edges: .all)
+        .appBackground()
         .overlay(alignment: .bottom) {
             TabBarOverlayView(selectedTab: $selectedTab)
         }
