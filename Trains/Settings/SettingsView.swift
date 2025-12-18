@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     
     @AppStorage(AppStorageKey.isDarkTheme.rawValue) private var isDarkTheme: Bool = false
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
     
     var body: some View {
         VStack {
@@ -28,7 +29,7 @@ struct SettingsView: View {
     
     private var userAgreement: some View {
         NavigationLink {
-            AgreementView()
+            AgreementView(networkMonitor: networkMonitor)
                 .navigationTitle(Text("Пользовательское соглашение"))
                 .navigationBarTitleDisplayMode(.inline)
         } label: {
@@ -59,4 +60,5 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environmentObject(NetworkMonitor())
 }

@@ -3,41 +3,33 @@ import SwiftUI
 struct AgreementView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @State private var error: ErrorType? = nil
-    private let url: URL?
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
+    @StateObject private var viewModel: AgreementViewModel
     
-    init() {
-        if let validURL = URL(string: "https://yandex.ru/legal/practicum_offer/ru/") {
-            self.url = validURL
-        } else {
-            self.url = nil
-            assertionFailure("Invalid agreement URL")
-        }
+    init(networkMonitor: NetworkMonitor) {
+        _viewModel = StateObject(wrappedValue: AgreementViewModel(networkMonitor: networkMonitor))
     }
     
     var body: some View {
-        ParentContainer(error: $error) {
-            if let url = url {
+        ParentContainer(error: $viewModel.error) {
+            if let url = viewModel.url {
                 WebView(url: url)
                     .navigationBarBackButtonHidden(true)
-                    .appBackground()
                     .backButtonToolbar(dismiss)
             } else {
                 ErrorView(type: .configurationError)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.appBackground)
             }
         }
         .onAppear {
-            if url == nil {
-                error = .configurationError
-            }
+            viewModel.onAppear()
         }
     }
 }
 
 #Preview {
+    let monitor = NetworkMonitor()
     NavigationStack {
-        AgreementView()
+        AgreementView(networkMonitor: monitor)
     }
+    .environmentObject(monitor)
 }
