@@ -4,9 +4,11 @@ struct TabBarView: View {
     
     @State private var selectedTab = 0
     
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
+    
     var body: some View {
         TabView(selection: $selectedTab) {
-            MainView()
+            MainView(viewModel: MainViewModel(networkMonitor: networkMonitor))
                 .tag(0)
                 .tabItem {
                     EmptyView()
@@ -29,4 +31,6 @@ struct TabBarView: View {
 #Preview {
     TabBarView()
         .preferredColorScheme(ColorScheme.dark)
+        .environmentObject(NetworkMonitor())
 }
+

@@ -3,51 +3,45 @@ import SwiftUI
 
 struct MainView: View {
     
-    @State private var whither = RoutePoint()
-    @State private var whence = RoutePoint()
+    @State private var viewModel: MainViewModel
     
-    @State private var showFlow = false
     @State private var isWhitherFlow = true
-    @State private var showCarriers = false
-    @State private var showCarrierInfo = false
     
     @State private var stories = StoriesViewModel().stories
     @State private var showStories = false
     @State private var selectedStoryIndex = 0
-    @State private var error: ErrorType? = nil
     
-    private var buttonIsEnabled: Bool {
-        !whither.settlement.isEmpty && !whence.settlement.isEmpty
-        && !whither.station.isEmpty && !whence.station.isEmpty
+    init(viewModel: MainViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
     }
     
     var body: some View {
-        ParentContainer(error: $error) {
+        ParentContainer(error: $viewModel.error) {
             VStack(spacing: 0) {
                 storyCollectionView
                     .padding(.vertical, 24)
                 routePointsSelectionView
                     .padding(.top, 20)
-                    .fullScreenCover(isPresented: $showFlow) {
-                        FlowView { settlement, station in
-                            if isWhitherFlow {
-                                whither.settlement = settlement
-                                whither.station = station
-                            } else {
-                                whence.settlement = settlement
-                                whence.station = station
+                    .fullScreenCover(isPresented: $viewModel.showFlow) {
+                        FlowView(
+                            viewModel: FlowRouteSelectionViewModel { route in
+                                if isWhitherFlow {
+                                    viewModel.whither = route
+                                } else {
+                                    viewModel.whence = route
+                                }
+                                viewModel.showFlow = false
                             }
-                            showFlow = false
-                        }
+                        )
                     }
-                    .fullScreenCover(isPresented: $showCarriers) {
-                        let title = "\(whither.settlement) (\(whither.station))  →  \(whence.settlement) (\(whence.station))"
+                    .fullScreenCover(isPresented: $viewModel.showCarriers) {
+                        let title = "\(viewModel.whither.settlement) (\(viewModel.whither.station))  →  \(viewModel.whence.settlement) (\(viewModel.whence.station))"
                         NavigationStack {
-                            CarrierSelectionView(title: title, carriers: carriers) { carrierName in
+                            CarrierSelectionView(title: title, carriers: []) { carrierName in
                                 Logger.info("Выбран \(carrierName)")
-                                showCarrierInfo = true
+                                viewModel.showCarrierInfo = true
                             }
-                            .navigationDestination(isPresented: $showCarrierInfo) {
+                            .navigationDestination(isPresented: $viewModel.showCarrierInfo) {
                                 CarrierInfoView()
                             }
                         }
@@ -79,15 +73,15 @@ struct MainView: View {
     
     private var routePointsSelectionView: some View {
         RoutePointsSelectionView(
-            whither: $whither,
-            whence: $whence,
+            whither: $viewModel.whither,
+            whence: $viewModel.whence,
             whitherAction: {
                 isWhitherFlow = true
-                showFlow = true
+                viewModel.showFlow = true
             },
             whenceAction: {
                 isWhitherFlow = false
-                showFlow = true
+                viewModel.showFlow = true
             },
             swapAction: { swap() }
         )
@@ -97,57 +91,46 @@ struct MainView: View {
         PrimaryButton(
             title: "Найти",
             width: 150) {
-                showCarriers = true
+                viewModel.showCarriers = true
             }
-            .opacity(buttonIsEnabled ? 1 : 0)
+            .opacity(viewModel.isSearchEnabled ? 1 : 0)
     }
     
     private func swap() {
-        let temp = whither
-        whither = whence
-        whence = temp
+        let temp = viewModel.whither
+        viewModel.whither = viewModel.whence
+        viewModel.whence = temp
     }
     
     private func markStoryViewed(at index: Int) {
         stories[index].isViewed = true
     }
-    
-    let carriers: [Carrier] = [
-        Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "14 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-        Carrier(carrierName: "ФГК", startTime: "01:15", finishTime: "09:00", duration: "9 часов",
-                date: "15 января", connectingStation: nil, imageName: "fgk"),
-        Carrier(carrierName: "Урал логистика", startTime: "12:30", finishTime: "21:00", duration: "20 часов",
-                date: "16 января", connectingStation: nil, imageName: "ural"),
-        Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "9 часов",
-                date: "17 января", connectingStation: nil, imageName: "rzd"),
-        Carrier(carrierName: "4321", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-        Carrier(carrierName: "1234", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd")
-    ]
 }
 
 private struct FlowView: View {
     
-    @Environment(\.dismiss) private var dismiss
-    
     @State private var path = NavigationPath()
+    @State private var viewModel: FlowRouteSelectionViewModel
     
-    let onFinish: (String, String) -> Void
-    
-    @State private var selectedSettlement = ""
+    init(viewModel: FlowRouteSelectionViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationStack(path: $path) {
-            SettlementSelectionView { settlement in
-                selectedSettlement = settlement
+            
+            SettlementSelectionView(
+                settlements: viewModel.settlements
+            ) { settlement in
+                viewModel.selectSettlement(settlement)
                 path.append("station")
             }
             .navigationDestination(for: String.self) { value in
                 if value == "station" {
-                    StationSelectionView { station in
-                        onFinish(selectedSettlement, station)
+                    StationSelectionView(
+                        stations: viewModel.stations
+                    ) { station in
+                        viewModel.selectStation(station)
                     }
                     .navigationBarBackButtonHidden(true)
                 }
@@ -157,5 +140,8 @@ private struct FlowView: View {
 }
 
 #Preview {
-    MainView()
+    let monitor = NetworkMonitor()
+    MainView(viewModel: MainViewModel(networkMonitor: monitor))
+        .environmentObject(monitor)
 }
+

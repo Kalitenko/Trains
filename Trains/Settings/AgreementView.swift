@@ -3,7 +3,6 @@ import SwiftUI
 struct AgreementView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var networkMonitor: NetworkMonitor
     @StateObject private var viewModel: AgreementViewModel
     
     init(networkMonitor: NetworkMonitor) {

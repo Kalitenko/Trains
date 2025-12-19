@@ -4,14 +4,8 @@ struct SettlementSelectionView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    let settlements: [String]
     let onSelect: (String) -> Void
-    let settlements: [String] = [
-        "Населенный пункт 1",
-        "Населенный пункт 2",
-        "Населенный пункт 3",
-        "Населенный пункт 4",
-        "Населенный пункт 5"
-    ]
     
     var body: some View {
         SelectionListView(
@@ -26,8 +20,11 @@ struct SettlementSelectionView: View {
 
 #Preview {
     NavigationStack {
-        SettlementSelectionView(onSelect: { settlement in
-            print(settlement)
-        })
+        SettlementSelectionView(settlements: [
+            "Населенный пункт 1",
+            "Населенный пункт 2",
+            "Населенный пункт 3"]) { settlement in
+                print(settlement)
+            }
     }
 }
