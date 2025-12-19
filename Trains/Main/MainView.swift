@@ -35,15 +35,20 @@ struct MainView: View {
                         )
                     }
                     .fullScreenCover(isPresented: $viewModel.showCarriers) {
-                        let title = "\(viewModel.whither.settlement) (\(viewModel.whither.station))  →  \(viewModel.whence.settlement) (\(viewModel.whence.station))"
+                        let carrierVM = CarrierSelectionViewModel(
+                            whither: viewModel.whither,
+                            whence: viewModel.whence,
+                            networkMonitor: viewModel.networkMonitor
+                        ) { carrier in
+                            Logger.info("Выбран \(carrier.carrierName)")
+                            viewModel.showCarrierInfo = true
+                        }
+                        
                         NavigationStack {
-                            CarrierSelectionView(title: title, carriers: []) { carrierName in
-                                Logger.info("Выбран \(carrierName)")
-                                viewModel.showCarrierInfo = true
-                            }
-                            .navigationDestination(isPresented: $viewModel.showCarrierInfo) {
-                                CarrierInfoView()
-                            }
+                            CarrierSelectionView(viewModel: carrierVM)
+                                .navigationDestination(isPresented: $viewModel.showCarrierInfo) {
+                                    CarrierInfoView()
+                                }
                         }
                     }
                     .fullScreenCover(isPresented: $showStories) {

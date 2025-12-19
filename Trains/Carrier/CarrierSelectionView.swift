@@ -2,19 +2,16 @@ import SwiftUI
 
 struct CarrierSelectionView: View {
     
-    let title: String
-    let carriers: [Carrier]
-    let onSelect: (String) -> Void
+    @State private var viewModel: CarrierSelectionViewModel
     
     @Environment(\.dismiss) private var dismiss
-    @State private var showFilters = false
     
-    @State private var selectedTimeRanges: Set<DepartureTimeRange> = []
-    @State private var selectedOption: TransferOption?
-    @State private var error: ErrorType? = nil
+    init(viewModel: CarrierSelectionViewModel) {
+        _viewModel = State(wrappedValue: viewModel)
+    }
     
     var body: some View {
-        ParentContainer(error: $error) {
+        ParentContainer(error: $viewModel.error) {
             ZStack(alignment: .bottom) {
                 VStack {
                     titleView
@@ -23,7 +20,7 @@ struct CarrierSelectionView: View {
                 .background(Color.appBackground)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay {
-                    if carriers.isEmpty {
+                    if viewModel.carriers.isEmpty {
                         noOptionsText
                     }
                 }
@@ -31,11 +28,11 @@ struct CarrierSelectionView: View {
                 .backButtonToolbar(dismiss)
                 button
             }
-            .fullScreenCover(isPresented: $showFilters) {
+            .fullScreenCover(isPresented: $viewModel.showFilters) {
                 NavigationStack {
                     FilterView(
-                        selectedTimeRanges: $selectedTimeRanges,
-                        selectedOption: $selectedOption
+                        selectedTimeRanges: $viewModel.selectedTimeRanges,
+                        selectedOption: $viewModel.selectedOption
                     )
                 }
             }
@@ -43,7 +40,7 @@ struct CarrierSelectionView: View {
     }
     
     private var titleView: some View {
-        Text(title)
+        Text(viewModel.title)
             .font(.bold24)
             .padding(.horizontal, 16)
             .foregroundStyle(.appTextPrimary)
@@ -57,9 +54,9 @@ struct CarrierSelectionView: View {
     
     private var list: some View {
         
-        List(carriers, id: \.self) { carrier in
+        List(viewModel.filteredCarriers, id: \.self) { carrier in
             Button {
-                onSelect(carrier.carrierName)
+                viewModel.onSelect(carrier)
             } label: {
                 CarrierSelectionRowView(carrier: carrier)
                 
@@ -74,45 +71,38 @@ struct CarrierSelectionView: View {
         .padding(.bottom, 80)
     }
     
-    
     private var button: some View {
         PrimaryButton(
             title: "Уточнить время",
             showDot: isDotShown
         ) {
-            showFilters = true
+            viewModel.showFilters = true
         }
     }
     
     private var isDotShown: Bool {
-        selectedOption != nil || !selectedTimeRanges.isEmpty
+        viewModel.selectedOption != nil || !viewModel.selectedTimeRanges.isEmpty
     }
 }
 
 #Preview {
+    let whither = RoutePoint(settlement: "Москва", station: "Ярославский вокзал")
+    let whence = RoutePoint(settlement: "Санкт Петербург", station: "Балтийский вокзал")
+    let monitor = NetworkMonitor()
     
-    let carriers: [Carrier] = [
-        Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "14 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-        Carrier(carrierName: "ФГК", startTime: "01:15", finishTime: "09:00", duration: "9 часов",
-                date: "15 января", connectingStation: nil, imageName: "fgk"),
-        Carrier(carrierName: "Урал логистика", startTime: "12:30", finishTime: "21:00", duration: "20 часов",
-                date: "16 января", connectingStation: nil, imageName: "ural"),
-        Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "9 часов",
-                date: "17 января", connectingStation: nil, imageName: "rzd"),
-        Carrier(carrierName: "4321", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-        Carrier(carrierName: "1234", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd")
-    ]
+    let vm = CarrierSelectionViewModel(
+        whither: whither,
+        whence: whence,
+        networkMonitor: monitor,
+        onSelect: { carrier in
+            print("Выбран перевозчик \(carrier.carrierName)")
+        }
+    )
+    
     NavigationStack {
-        CarrierSelectionView(
-            title: "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)",
-            carriers: carriers,
-            onSelect: { name in
-                print("Выбран перевозчик \(name)")
-            }
-        )
-        .preferredColorScheme(.dark)
+        CarrierSelectionView(viewModel: vm)
+            .preferredColorScheme(.dark)
     }
+    .environmentObject(monitor)
 }
+

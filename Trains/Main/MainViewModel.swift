@@ -23,7 +23,7 @@ final class MainViewModel {
     }
     
     // MARK: - Network
-    private let networkMonitor: NetworkMonitor
+    let networkMonitor: NetworkMonitor
     private var cancellables = Set<AnyCancellable>()
     
     init(networkMonitor: NetworkMonitor) {
