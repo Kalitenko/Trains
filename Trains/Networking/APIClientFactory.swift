@@ -15,4 +15,8 @@ enum APIClientFactory {
             ]
         )
     }
+    
+    static func makeClient() -> Client {
+        makeClient(apiKey: "")
+    }
 }

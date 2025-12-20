@@ -1,19 +1,19 @@
 import SwiftUI
 
-struct SelectionListView: View {
+struct SelectionListView<Item: SelectionItem>: View {
     
     let title: String
-    let items: [String]
+    let items: [Item]
     let notFoundText: String
     let searchPlaceholder: String
-    let onSelect: (String) -> Void
+    let onSelect: (Item) -> Void
     
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
     @State private var error: ErrorType? = nil
     
-    var filteredItems: [String] {
-        searchText.isEmpty ? items : items.filter { $0.localizedCaseInsensitiveContains(searchText)}
+    var filteredItems: [Item] {
+        searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText)}
     }
     
     var body: some View {
@@ -24,7 +24,7 @@ struct SelectionListView: View {
                     Button {
                         onSelect(item)
                     } label: {
-                        SelectionListRowView(title: item)
+                        SelectionListRowView(title: item.title)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.appBackground)
@@ -47,29 +47,21 @@ struct SelectionListView: View {
     }
 }
 
-#Preview {
-    NavigationStack {
-        SelectionListView(
-            title: "Выбор",
-            items: ["Один", "Два", "Три"],
-            notFoundText: "Опция не найдена",
-            searchPlaceholder: "Поиск",
-            onSelect: { item in
-                print("Выбор: \(item)")
-            })
-    }
+private struct SelectionItemExample: SelectionItem {
+    var id: UUID = UUID()
+    var title: String
 }
 
-#Preview("Dark") {
+#Preview {
+    let items = [SelectionItemExample(title: "Один"), SelectionItemExample(title: "Два"), SelectionItemExample(title: "Три")]
     NavigationStack {
         SelectionListView(
             title: "Выбор",
-            items: ["Один", "Два", "Три"],
+            items: items,
             notFoundText: "Опция не найдена",
             searchPlaceholder: "Поиск",
             onSelect: { item in
                 print("Выбор: \(item)")
             })
     }
-    .preferredColorScheme(.dark)
 }

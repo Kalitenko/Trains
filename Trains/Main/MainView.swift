@@ -23,16 +23,23 @@ struct MainView: View {
                 routePointsSelectionView
                     .padding(.top, 20)
                     .fullScreenCover(isPresented: $viewModel.showFlow) {
-                        FlowView(
-                            viewModel: FlowRouteSelectionViewModel { route in
-                                if isWhitherFlow {
-                                    viewModel.whither = route
-                                } else {
-                                    viewModel.whence = route
-                                }
-                                viewModel.showFlow = false
+                        let flowRouteSelectionViewModel = FlowRouteSelectionViewModel(
+                            // TODO: -  allStationsService: CachedAllStationsService(remote: AllStationsService(client: viewModel.client))
+                            allStationsService: CachedAllStationsService(remote: LocalAllStationsService())
+                        ) { route in
+                            if isWhitherFlow {
+                                viewModel.whither = route
+                            } else {
+                                viewModel.whence = route
                             }
+                            viewModel.showFlow = false
+                        }
+                        FlowView(
+                            viewModel: flowRouteSelectionViewModel
                         )
+                        .task {
+                            await flowRouteSelectionViewModel.loadSettlements()
+                        }
                     }
                     .fullScreenCover(isPresented: $viewModel.showCarriers) {
                         let carrierVM = CarrierSelectionViewModel(

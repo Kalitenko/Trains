@@ -25,6 +25,7 @@ final class MainViewModel {
     // MARK: - Network
     let networkMonitor: NetworkMonitor
     private var cancellables = Set<AnyCancellable>()
+    var client = APIClientFactory.makeClient()
     
     init(networkMonitor: NetworkMonitor) {
         self.networkMonitor = networkMonitor
