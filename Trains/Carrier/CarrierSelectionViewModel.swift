@@ -7,6 +7,7 @@ final class CarrierSelectionViewModel {
     
     private let whither: RoutePoint
     private let whence: RoutePoint
+    private let scheduleService: ScheduleBetweenStationsServiceProtocol
     
     // MARK: - UI State
     var carriers: [Carrier]
@@ -28,37 +29,60 @@ final class CarrierSelectionViewModel {
     init(
         whither: RoutePoint,
         whence: RoutePoint,
+        scheduleBetweenStationsServiceService: ScheduleBetweenStationsServiceProtocol,
         networkMonitor: NetworkMonitor,
         onSelect: @escaping (Carrier) -> Void
     ) {
         self.whither = whither
         self.whence = whence
-        self.title = "\(self.whither.settlement) (\(self.whither.station))  →  \(self.whence.settlement) (\(self.whence.station))"
+        self.scheduleService = scheduleBetweenStationsServiceService
+        self.title = "\(self.whither.settlement) (\(self.whither.station.title))  →  \(self.whence.settlement) (\(self.whence.station.title))"
         
         
         self.networkMonitor = networkMonitor
         self.onSelect = onSelect
         
-        let carriers = Self.makeCarriers()
+        let carriers = [Carrier]()
         self.carriers = carriers
         self.filteredCarriers = carriers
     }
     
-    
-    private static func makeCarriers() -> [Carrier] {
-        [
-            Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                    date: "14 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-            Carrier(carrierName: "ФГК", startTime: "01:15", finishTime: "09:00", duration: "9 часов",
-                    date: "15 января", connectingStation: nil, imageName: "fgk"),
-            Carrier(carrierName: "Урал логистика", startTime: "12:30", finishTime: "21:00", duration: "20 часов",
-                    date: "16 января", connectingStation: nil, imageName: "ural"),
-            Carrier(carrierName: "РЖД", startTime: "22:30", finishTime: "08:15", duration: "9 часов",
-                    date: "17 января", connectingStation: nil, imageName: "rzd"),
-            Carrier(carrierName: "4321", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                    date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd"),
-            Carrier(carrierName: "1234", startTime: "22:30", finishTime: "08:15", duration: "20 часов",
-                    date: "33 января", connectingStation: "С пересадкой в Костроме", imageName: "rzd")
-        ]
+    func loadSchedule() async {
+        do {
+            let segments = try await scheduleService.getScheduleBetweenStations(
+                from: whence.station.id,
+                to: whither.station.id,
+                when: nil
+            )
+            
+            let carriers: [Carrier] = (segments.segments ?? []).compactMap { segment in
+                guard
+                    let thread = segment.thread,
+                    let carrier = thread.carrier,
+                    let carrierName = carrier.title,
+                    let departure = segment.departure,
+                    let arrival = segment.arrival,
+                    let duration = segment.duration
+                else { return nil }
+                
+                let imageURL = carrier.logo.flatMap(URL.init)
+                
+                return Carrier(
+                    carrierName: carrierName,
+                    departure: departure,
+                    arrival: arrival,
+                    duration: TimeInterval(duration),
+                    connectingStation: nil,
+                    imageURL: imageURL
+                )
+            }
+            
+            self.carriers = carriers
+            self.filteredCarriers = carriers
+            
+        } catch {
+            self.error = .serverError
+            Logger.error("error: \(error)")
+        }
     }
 }

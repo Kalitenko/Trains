@@ -28,6 +28,9 @@ struct CarrierSelectionView: View {
                 .backButtonToolbar(dismiss)
                 button
             }
+            .task {
+                await viewModel.loadSchedule()
+            }
             .fullScreenCover(isPresented: $viewModel.showFilters) {
                 NavigationStack {
                     FilterView(
@@ -85,14 +88,17 @@ struct CarrierSelectionView: View {
     }
 }
 
-#Preview {
-    let whither = RoutePoint(settlement: "Москва", station: "Ярославский вокзал")
-    let whence = RoutePoint(settlement: "Санкт Петербург", station: "Балтийский вокзал")
+#Preview("1") {
+    let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
+    let whence = RoutePoint(settlement: "Караганда", station: StationItem(id: "", title: "???"))
     let monitor = NetworkMonitor()
+    
+    let client = APIClientFactory.makeClient()
     
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,
+        scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowKaraganda.fileName),
         networkMonitor: monitor,
         onSelect: { carrier in
             print("Выбран перевозчик \(carrier.carrierName)")
@@ -106,3 +112,51 @@ struct CarrierSelectionView: View {
     .environmentObject(monitor)
 }
 
+#Preview("2") {
+    let whither = RoutePoint(settlement: "Симферополь", station: StationItem(id: "", title: "СТАНЦИЯ"))
+    let whence = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
+    let monitor = NetworkMonitor()
+    
+    let client = APIClientFactory.makeClient()
+    
+    let vm = CarrierSelectionViewModel(
+        whither: whither,
+        whence: whence,
+        scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.simferopolMoscow.fileName),
+        networkMonitor: monitor,
+        onSelect: { carrier in
+            print("Выбран перевозчик \(carrier.carrierName)")
+        }
+    )
+    
+    NavigationStack {
+        CarrierSelectionView(viewModel: vm)
+            .preferredColorScheme(.dark)
+    }
+    .environmentObject(monitor)
+}
+
+
+#Preview("3") {
+    let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
+    let whence = RoutePoint(settlement: "Санкт-Петербург", station: StationItem(id: "", title: "СТАНЦИЯ"))
+    let monitor = NetworkMonitor()
+    
+    let client = APIClientFactory.makeClient()
+    
+    let vm = CarrierSelectionViewModel(
+        whither: whither,
+        whence: whence,
+        scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowSaintPetersburg.fileName),
+        networkMonitor: monitor,
+        onSelect: { carrier in
+            print("Выбран перевозчик \(carrier.carrierName)")
+        }
+    )
+    
+    NavigationStack {
+        CarrierSelectionView(viewModel: vm)
+            .preferredColorScheme(.dark)
+    }
+    .environmentObject(monitor)
+}

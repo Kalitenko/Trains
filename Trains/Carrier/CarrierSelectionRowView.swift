@@ -25,10 +25,24 @@ struct CarrierSelectionRowView: View {
     }
     
     private var carrierPic: some View {
-        Image(carrier.imageName)
+        Group {
+            if let url = carrier.imageURL {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                } placeholder: {
+                    placeholderImage
+                }
+            } else {
+                placeholderImage
+            }
+        }
+        .frame(width: 38, height: 38)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+    
+    private var placeholderImage: some View {
+        Image(.carrierPlaceholder)
             .resizable()
-            .frame(width: 38, height: 38)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
     
     private var textPart: some View {
@@ -67,7 +81,7 @@ struct CarrierSelectionRowView: View {
                 .font(.regular17)
                 .foregroundStyle(.appBlack)
             line
-            Text(carrier.duration)
+            Text(carrier.durationText)
                 .font(.regular12)
                 .foregroundStyle(.appBlack)
             line
@@ -89,12 +103,26 @@ struct CarrierSelectionRowView: View {
         CarrierSelectionRowView(
             carrier: Carrier(
                 carrierName: "РЖД",
-                startTime: "22:30",
-                finishTime: "08:15",
-                duration: "20 часов",
-                date: "14 января",
+                departure: Calendar.current.date(
+                    bySettingHour: 22,
+                    minute: 30,
+                    second: 0,
+                    of: Date()
+                )!,
+                arrival: Calendar.current.date(
+                    byAdding: .hour,
+                    value: 10,
+                    to: Calendar.current.date(
+                        bySettingHour: 22,
+                        minute: 30,
+                        second: 0,
+                        of: Date()
+                    )!
+                )!,
+                duration: 20 * 60 * 60,
                 connectingStation: "С пересадкой в Костроме",
-                imageName: "rzd")
+                imageURL: nil
+            )
         )
         .padding(10)
         .background(Color.yellow)
@@ -102,12 +130,22 @@ struct CarrierSelectionRowView: View {
         CarrierSelectionRowView(
             carrier: Carrier(
                 carrierName: "РЖД",
-                startTime: "22:30",
-                finishTime: "08:15",
-                duration: "20 часов",
-                date: "14 января",
+                departure: Calendar.current.date(
+                    bySettingHour: 22,
+                    minute: 30,
+                    second: 0,
+                    of: Date()
+                )!,
+                arrival: Calendar.current.date(
+                    bySettingHour: 8,
+                    minute: 15,
+                    second: 0,
+                    of: Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+                )!,
+                duration: (9 * 60 + 45) * 60,
                 connectingStation: nil,
-                imageName: "rzd")
+                imageURL: nil
+            )
         )
         .padding(10)
         .background(Color.orange)

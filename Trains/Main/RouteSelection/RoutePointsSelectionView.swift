@@ -35,9 +35,12 @@ struct RoutePointsSelectionView: View {
         .padding(10)
         .background(Color.cyan)
         
+        let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "Ярославский вокзал"))
+        let whence = RoutePoint(settlement: "Санкт Петербург", station: StationItem(id: "", title: "Балтийский вокзал"))
+        
         RoutePointsSelectionView(
-            whither: .constant(RoutePoint(settlement: "Москва", station: "Курский")),
-            whence: .constant(RoutePoint(settlement: "Сочи", station: "Альпика")),
+            whither: .constant(whither),
+            whence: .constant(whence),
             whitherAction: { print("tap куда") },
             whenceAction: { print("tap откуда") },
             swapAction: { print("tap swap") }

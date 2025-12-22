@@ -17,7 +17,7 @@ struct RoutePointsStackView: View {
                 view: RoutePointView(
                     placeholder: whencePlaceholder,
                     settlement: whenceRoutePoint.settlement,
-                    station: whenceRoutePoint.station
+                    station: whenceRoutePoint.station.title
                 ),
                 action: whenceAction
             )
@@ -26,7 +26,7 @@ struct RoutePointsStackView: View {
                 view: RoutePointView(
                     placeholder: whitherPlaceholder,
                     settlement: whitherRoutePoint.settlement,
-                    station: whitherRoutePoint.station
+                    station: whitherRoutePoint.station.title
                 ),
                 action: whitherAction
             )
@@ -57,9 +57,12 @@ struct RoutePointsStackView: View {
         .padding(10)
         .background(Color.yellow)
         
+        let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "Ярославский вокзал"))
+        let whence = RoutePoint(settlement: "Санкт Петербург", station: StationItem(id: "", title: "Балтийский вокзал"))
+        
         RoutePointsStackView(
-            whither: RoutePoint(settlement: "Москва", station: "Курский"),
-            whence: RoutePoint(settlement: "Сочи", station: "Альпика"),
+            whither: whither,
+            whence: whence,
             whitherAction: { print("tap куда") },
             whenceAction: { print("tap откуда") }
         )

@@ -3,7 +3,6 @@ import OpenAPIURLSession
 
 struct ContentView: View {
     
-    private let apiKey: String = ""
     @State private var client: Client?
     
     var body: some View {
@@ -16,13 +15,13 @@ struct ContentView: View {
         .padding()
         .onAppear {
             if client == nil {
-                client = APIClientFactory.makeClient(apiKey: apiKey)
+                client = APIClientFactory.makeClient()
             }
             let date = Date()
             let formattedDateString = date.ISO8601DateString
             //            testFetchStations()
             //            testFetchCopyright()
-            //            testFetchScheduleBetweenStations()
+            testFetchScheduleBetweenStations()
             //            testFetchScheduleBetweenStationsForDate(formattedDateString: formattedDateString)
             //            testFetchStationSchedule()
             //            testFetchStationScheduleForDate(formattedDateString: formattedDateString)

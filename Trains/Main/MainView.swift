@@ -45,6 +45,7 @@ struct MainView: View {
                         let carrierVM = CarrierSelectionViewModel(
                             whither: viewModel.whither,
                             whence: viewModel.whence,
+                            scheduleBetweenStationsServiceService: ScheduleBetweenStationsService(client: viewModel.client),
                             networkMonitor: viewModel.networkMonitor
                         ) { carrier in
                             Logger.info("Выбран \(carrier.carrierName)")

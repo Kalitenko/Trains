@@ -40,7 +40,7 @@ final class FlowRouteSelectionViewModel {
     private func finish(settlement: SettlementItem, station: StationItem) {
         let route = RoutePoint(
             settlement: settlement.title,
-            station: station.title,
+            station: station,
         )
         onFinish(route)
     }

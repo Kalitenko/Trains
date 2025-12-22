@@ -1,14 +1,14 @@
 struct RoutePoint {
     var settlement: String
-    var station: String
+    var station: StationItem
     
-    init(settlement: String, station: String) {
+    init(settlement: String, station: StationItem) {
         self.settlement = settlement
         self.station = station
     }
     
     init() {
         self.settlement = ""
-        self.station = ""
+        self.station = StationItem(id: "", title: "")
     }
 }

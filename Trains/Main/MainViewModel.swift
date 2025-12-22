@@ -18,8 +18,8 @@ final class MainViewModel {
     var isSearchEnabled: Bool {
         !whither.settlement.isEmpty &&
         !whence.settlement.isEmpty &&
-        !whither.station.isEmpty &&
-        !whence.station.isEmpty
+        !whither.station.title.isEmpty &&
+        !whence.station.title.isEmpty
     }
     
     // MARK: - Network
