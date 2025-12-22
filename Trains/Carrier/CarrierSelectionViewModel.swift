@@ -78,11 +78,41 @@ final class CarrierSelectionViewModel {
             }
             
             self.carriers = carriers
-            self.filteredCarriers = carriers
+            applyFilters()
             
         } catch {
             self.error = .serverError
             Logger.error("error: \(error)")
+        }
+    }
+    
+    func applyFilters() {
+        filteredCarriers = carriers.filter { carrier in
+            let timeMatches: Bool
+            if selectedTimeRanges.isEmpty {
+                timeMatches = true
+            } else {
+                timeMatches = selectedTimeRanges.contains { range in
+                    switch range {
+                    case .morning: carrier.departure.isBetween(startHour: 6, endHour: 12)
+                    case .day:     carrier.departure.isBetween(startHour: 12, endHour: 18)
+                    case .evening: carrier.departure.isBetween(startHour: 18, endHour: 24)
+                    case .night:   carrier.departure.isBetween(startHour: 0, endHour: 6)
+                    }
+                }
+            }
+            
+            let transferMatches: Bool
+            if let option = selectedOption {
+                switch option {
+                case .yes: transferMatches = carrier.hasTransfer
+                case .no:  transferMatches = !carrier.hasTransfer
+                }
+            } else {
+                transferMatches = true
+            }
+            
+            return timeMatches && transferMatches
         }
     }
 }

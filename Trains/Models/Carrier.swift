@@ -13,4 +13,5 @@ extension Carrier {
     var finishTime: String { DateFormatter.time.string(from: arrival) }
     var date: String { DateFormatter.dayMonth.string(from: departure) }
     var durationText: String { duration.hoursMinutesString }
+    var hasTransfer: Bool { connectingStation != nil }
 }

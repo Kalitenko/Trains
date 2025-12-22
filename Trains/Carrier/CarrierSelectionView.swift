@@ -20,7 +20,7 @@ struct CarrierSelectionView: View {
                 .background(Color.appBackground)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay {
-                    if viewModel.carriers.isEmpty {
+                    if viewModel.filteredCarriers.isEmpty {
                         noOptionsText
                     }
                 }
@@ -33,10 +33,7 @@ struct CarrierSelectionView: View {
             }
             .fullScreenCover(isPresented: $viewModel.showFilters) {
                 NavigationStack {
-                    FilterView(
-                        selectedTimeRanges: $viewModel.selectedTimeRanges,
-                        selectedOption: $viewModel.selectedOption
-                    )
+                    FilterView(viewModel: viewModel)
                 }
             }
         }

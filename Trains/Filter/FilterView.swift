@@ -2,12 +2,11 @@ import SwiftUI
 
 struct FilterView: View {
     
-    @Binding var selectedTimeRanges: Set<DepartureTimeRange>
-    @Binding var selectedOption: TransferOption?
+    @State var viewModel: CarrierSelectionViewModel
     @Environment(\.dismiss) private var dismiss
     
     private var buttonIsEnabled: Bool {
-        !selectedTimeRanges.isEmpty || selectedOption != nil
+        !viewModel.selectedTimeRanges.isEmpty || viewModel.selectedOption != nil
     }
     
     var body: some View {
@@ -17,10 +16,10 @@ struct FilterView: View {
         }
         .backButtonToolbar(dismiss)
         Spacer()
-        PrimaryButton(title: "Применить",
-                      action: {
+        PrimaryButton(title: "Применить") {
+            viewModel.applyFilters()
             dismiss()
-        })
+        }
         .opacity(buttonIsEnabled ? 1 : 0)
         .padding(.bottom, 24)
     }
@@ -29,11 +28,10 @@ struct FilterView: View {
         Section(header: FilterHeaderView(header: "Время вылета")) {
             ForEach(DepartureTimeRange.allCases, id: \.self) { range in
                 CheckItemView(text: range.rawValue,
-                              isSelected: selectedTimeRanges.contains(range),
-                              style: .square,
-                              action: {
+                              isSelected: viewModel.selectedTimeRanges.contains(range),
+                              style: .square) {
                     toggleTimeRange(range)
-                })
+                }
             }
         }
     }
@@ -43,13 +41,13 @@ struct FilterView: View {
             ForEach(TransferOption.allCases, id: \.self) { option in
                 CheckItemView(
                     text: option.rawValue,
-                    isSelected: selectedOption == option,
+                    isSelected: viewModel.selectedOption == option,
                     style: .circle,
                 ) {
-                    if selectedOption == option {
-                        selectedOption = nil
+                    if viewModel.selectedOption == option {
+                        viewModel.selectedOption = nil
                     } else {
-                        selectedOption = option
+                        viewModel.selectedOption = option
                     }
                 }
             }
@@ -57,10 +55,10 @@ struct FilterView: View {
     }
     
     private func toggleTimeRange(_ range: DepartureTimeRange) {
-        if selectedTimeRanges.contains(range) {
-            selectedTimeRanges.remove(range)
+        if viewModel.selectedTimeRanges.contains(range) {
+            viewModel.selectedTimeRanges.remove(range)
         } else {
-            selectedTimeRanges.insert(range)
+            viewModel.selectedTimeRanges.insert(range)
         }
     }
     
@@ -68,6 +66,22 @@ struct FilterView: View {
 
 #Preview {
     NavigationStack {
-        FilterView(selectedTimeRanges:  .constant([]), selectedOption:  .constant(nil))
+        
+        let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
+        let whence = RoutePoint(settlement: "Санкт-Петербург", station: StationItem(id: "", title: "СТАНЦИЯ"))
+        let monitor = NetworkMonitor()
+        
+        let client = APIClientFactory.makeClient()
+        
+        let vm = CarrierSelectionViewModel(
+            whither: whither,
+            whence: whence,
+            scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowSaintPetersburg.fileName),
+            networkMonitor: monitor,
+            onSelect: { carrier in
+                print("Выбран перевозчик \(carrier.carrierName)")
+            }
+        )
+        FilterView(viewModel: vm)
     }
 }
