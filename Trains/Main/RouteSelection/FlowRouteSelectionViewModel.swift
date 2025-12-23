@@ -19,6 +19,13 @@ final class FlowRouteSelectionViewModel {
     
     let onFinish: (RoutePoint) -> Void
     
+    // MARK: - Settings
+    var onlyFewCities: Bool {
+        get { UserDefaults.standard.bool(forKey: AppStorageKey.fewCities.rawValue) }
+        set { UserDefaults.standard.set(newValue, forKey: AppStorageKey.fewCities.rawValue) }
+    }
+    private let cities = ["Москва", "Минск", "Смоленск", "Санкт-Петербург", "Караганды"]
+    
     private let transportTypes = ["train", "suburban"]
     private let stationTypes = ["station", "platform", "train_station"]
     
@@ -62,7 +69,7 @@ final class FlowRouteSelectionViewModel {
             let rawSettlements = regions.flatMap { $0.settlements ?? [] }
             Logger.debug("rawSettlements.count: \(rawSettlements.count)")
             
-            let mappedSettlements: [SettlementItem] = rawSettlements.compactMap { settlement in
+            var mappedSettlements: [SettlementItem] = rawSettlements.compactMap { settlement in
                 
                 let title = settlement.title
                 guard let settlementTitle = title, !settlementTitle.isEmpty else {
@@ -100,6 +107,11 @@ final class FlowRouteSelectionViewModel {
                     title: settlementTitle,
                     stations: stationItems
                 )
+            }
+            
+            // MARK: - Apply "few cities" filter
+            if onlyFewCities {
+                mappedSettlements = mappedSettlements.filter { cities.contains($0.title) }
             }
             
             self.settlements = mappedSettlements

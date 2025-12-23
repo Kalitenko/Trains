@@ -20,7 +20,6 @@ final class CarrierSelectionViewModel {
     var error: ErrorType? = nil
     
     let title: String
-    let onSelect: (Carrier) -> Void
     
     // MARK: - Network
     let networkMonitor: NetworkMonitor
@@ -31,8 +30,7 @@ final class CarrierSelectionViewModel {
         whither: RoutePoint,
         whence: RoutePoint,
         scheduleBetweenStationsServiceService: ScheduleBetweenStationsServiceProtocol,
-        networkMonitor: NetworkMonitor,
-        onSelect: @escaping (Carrier) -> Void
+        networkMonitor: NetworkMonitor
     ) {
         self.whither = whither
         self.whence = whence
@@ -41,7 +39,6 @@ final class CarrierSelectionViewModel {
         
         
         self.networkMonitor = networkMonitor
-        self.onSelect = onSelect
         
         let carriers = [Carrier]()
         self.carriers = carriers
@@ -53,7 +50,7 @@ final class CarrierSelectionViewModel {
             let segments = try await scheduleService.getScheduleBetweenStations(
                 from: whence.station.id,
                 to: whither.station.id,
-                when: nil
+                when: Date().ISO8601DateString
             )
             
             let carriers: [Carrier] = (segments.segments ?? []).compactMap { segment in

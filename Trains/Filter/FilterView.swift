@@ -77,10 +77,7 @@ struct FilterView: View {
             whither: whither,
             whence: whence,
             scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowSaintPetersburg.fileName),
-            networkMonitor: monitor,
-            onSelect: { carrier in
-                print("Выбран перевозчик \(carrier.carrierName)")
-            }
+            networkMonitor: monitor
         )
         FilterView(viewModel: vm)
     }

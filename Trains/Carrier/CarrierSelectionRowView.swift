@@ -27,10 +27,23 @@ struct CarrierSelectionRowView: View {
     private var carrierPic: some View {
         Group {
             if let url = carrier.imageURL {
-                AsyncImage(url: url) { image in
-                    image.resizable()
-                } placeholder: {
-                    placeholderImage
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .background(Color.gray.opacity(0.1))
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity)
+                            .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                    case .failure:
+                        placeholderImage
+                    @unknown default:
+                        placeholderImage
+                    }
                 }
             } else {
                 placeholderImage

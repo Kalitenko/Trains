@@ -47,9 +47,9 @@ struct MainView: View {
                             whence: viewModel.whence,
                             scheduleBetweenStationsServiceService: ScheduleBetweenStationsService(client: viewModel.client),
                             networkMonitor: viewModel.networkMonitor
-                        ) { carrier in
-                            Logger.info("Выбран \(carrier.carrierName)")
-                            viewModel.showCarrierInfo = true
+                        )
+                        NavigationStack{
+                            CarrierSelectionView(viewModel: carrierVM)
                         }
                     }
                     .fullScreenCover(isPresented: $showStories) {

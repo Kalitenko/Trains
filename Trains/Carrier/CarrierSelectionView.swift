@@ -67,7 +67,6 @@ struct CarrierSelectionView: View {
         
         List(viewModel.filteredCarriers, id: \.self) { carrier in
             Button {
-                viewModel.onSelect(carrier)
                 selectedCarrier = carrier
             } label: {
                 CarrierSelectionRowView(carrier: carrier)
@@ -108,10 +107,7 @@ struct CarrierSelectionView: View {
         whither: whither,
         whence: whence,
         scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowKaraganda.fileName),
-        networkMonitor: monitor,
-        onSelect: { carrier in
-            print("Выбран перевозчик \(carrier.carrierName)")
-        }
+        networkMonitor: monitor
     )
     
     NavigationStack {
@@ -132,10 +128,7 @@ struct CarrierSelectionView: View {
         whither: whither,
         whence: whence,
         scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.simferopolMoscow.fileName),
-        networkMonitor: monitor,
-        onSelect: { carrier in
-            print("Выбран перевозчик \(carrier.carrierName)")
-        }
+        networkMonitor: monitor
     )
     
     NavigationStack {
@@ -157,10 +150,7 @@ struct CarrierSelectionView: View {
         whither: whither,
         whence: whence,
         scheduleBetweenStationsServiceService: LocalScheduleBetweenStationsService(fileName: LocalRoute.moscowSaintPetersburg.fileName),
-        networkMonitor: monitor,
-        onSelect: { carrier in
-            print("Выбран перевозчик \(carrier.carrierName)")
-        }
+        networkMonitor: monitor
     )
     
     NavigationStack {

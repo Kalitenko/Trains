@@ -32,13 +32,24 @@ struct CarrierInfoView: View {
     private var image: some View {
         Group {
             if let url = viewModel.imageURL {
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: .infinity)
-                } placeholder: {
-                    placeholderImage
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .frame(maxWidth: .infinity, maxHeight: 200)
+                            .background(Color.gray.opacity(0.1))
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity)
+                            .transition(.opacity.animation(.easeInOut(duration: 0.5)))
+                    case .failure:
+                        placeholderImage
+                    @unknown default:
+                        placeholderImage
+                    }
                 }
             } else {
                 placeholderImage

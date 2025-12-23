@@ -154,6 +154,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Segments'
+        "404":
+          description: Not found, return empty list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segments'
   /v3.0/schedule/:
     get:
       tags:
