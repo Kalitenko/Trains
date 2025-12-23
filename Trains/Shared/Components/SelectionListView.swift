@@ -6,11 +6,11 @@ struct SelectionListView<Item: SelectionItem>: View {
     let items: [Item]
     let notFoundText: String
     let searchPlaceholder: String
+    @Binding var error: ErrorType?
     let onSelect: (Item) -> Void
     
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
-    @State private var error: ErrorType? = nil
     
     var filteredItems: [Item] {
         searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText)}
@@ -60,6 +60,7 @@ private struct SelectionItemExample: SelectionItem {
             items: items,
             notFoundText: "Опция не найдена",
             searchPlaceholder: "Поиск",
+            error: .constant(nil),
             onSelect: { item in
                 print("Выбор: \(item)")
             })

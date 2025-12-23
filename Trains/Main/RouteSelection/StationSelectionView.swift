@@ -3,6 +3,7 @@ import SwiftUI
 struct StationSelectionView: View {
     
     let stations: [StationItem]
+    let error: Binding<ErrorType?>
     let onSelect: (StationItem) -> Void
     
     var body: some View {
@@ -11,6 +12,7 @@ struct StationSelectionView: View {
             items: stations,
             notFoundText: "Станция не найдена",
             searchPlaceholder: "Введите запрос",
+            error: error,
             onSelect: onSelect)
     }
 }
@@ -22,7 +24,8 @@ struct StationSelectionView: View {
         StationItem(id: UUID().uuidString, title: "Станция 3")
     ]
     NavigationStack {
-        StationSelectionView(stations: items) { station in
+        StationSelectionView(stations: items,
+                             error: .constant(nil)) { station in
                 print(station)
             }
     }

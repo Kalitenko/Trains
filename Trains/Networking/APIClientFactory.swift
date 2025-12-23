@@ -8,6 +8,7 @@ enum APIClientFactory {
         let transport = URLSessionTransport()
         return Client(
             serverURL: try! Servers.Server1.url(),
+            configuration: Configuration(dateTranscoder: TolerantDateTranscoder()),
             transport: transport,
             middlewares: [
                 APIKeyAuthMiddleware(apiKey: apiKey),

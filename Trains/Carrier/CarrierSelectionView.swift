@@ -38,15 +38,20 @@ struct CarrierSelectionView: View {
                 }
             }
             .navigationDestination(item: $selectedCarrier) { carrier in
-                CarrierInfoView(
-                    viewModel: CarrierInfoViewModel(
-                        code: carrier.code,
-                        system: nil,
-                        service: CarrierInfoService(client: viewModel.client),
-                        networkMonitor: viewModel.networkMonitor
-                    )
+                let carrierInfoVM = CarrierInfoViewModel(
+                    code: carrier.code,
+                    system: nil,
+                    service: CarrierInfoService(client: viewModel.client),
+                    networkMonitor: viewModel.networkMonitor
                 )
+                CarrierInfoView(
+                    viewModel: carrierInfoVM
+                )
+                .onAppear {
+                    carrierInfoVM.onAppear()
+                }
             }
+            
         }
     }
     

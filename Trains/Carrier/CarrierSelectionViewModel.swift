@@ -37,12 +37,18 @@ final class CarrierSelectionViewModel {
         self.scheduleService = scheduleBetweenStationsServiceService
         self.title = "\(self.whither.settlement) (\(self.whither.station.title))  →  \(self.whence.settlement) (\(self.whence.station.title))"
         
-        
         self.networkMonitor = networkMonitor
         
         let carriers = [Carrier]()
         self.carriers = carriers
         self.filteredCarriers = carriers
+        
+        networkMonitor.$isConnected
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isConnected in
+                self?.handleNetworkChange(isConnected)
+            }
+            .store(in: &cancellables)
     }
     
     func loadSchedule() async {
@@ -114,5 +120,14 @@ final class CarrierSelectionViewModel {
             
             return timeMatches && transferMatches
         }
+    }
+    
+    func onAppear() {
+        handleNetworkChange(networkMonitor.isConnected)
+    }
+    
+    private func handleNetworkChange(_ isConnected: Bool) {
+        guard error != .configurationError else { return }
+        error = isConnected ? nil : .noInternet
     }
 }

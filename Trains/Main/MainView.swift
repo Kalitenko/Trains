@@ -24,8 +24,8 @@ struct MainView: View {
                     .padding(.top, 20)
                     .fullScreenCover(isPresented: $viewModel.showFlow) {
                         let flowRouteSelectionViewModel = FlowRouteSelectionViewModel(
-                            // TODO: -  allStationsService: CachedAllStationsService(remote: AllStationsService(client: viewModel.client))
-                            allStationsService: CachedAllStationsService(remote: LocalAllStationsService())
+                            allStationsService: CachedAllStationsService(remote: AllStationsService(client: viewModel.client)),
+                            networkMonitor: viewModel.networkMonitor
                         ) { route in
                             if isWhitherFlow {
                                 viewModel.whither = route
@@ -37,6 +37,9 @@ struct MainView: View {
                         FlowView(
                             viewModel: flowRouteSelectionViewModel
                         )
+                        .onAppear{
+                            flowRouteSelectionViewModel.onAppear()
+                        }
                         .task {
                             await flowRouteSelectionViewModel.loadSettlements()
                         }
@@ -126,7 +129,8 @@ private struct FlowView: View {
         NavigationStack(path: $path) {
             
             SettlementSelectionView(
-                settlements: viewModel.settlements
+                settlements: viewModel.settlements,
+                error: $viewModel.error
             ) { settlement in
                 viewModel.selectSettlement(settlement)
                 path.append("station")
@@ -134,12 +138,19 @@ private struct FlowView: View {
             .navigationDestination(for: String.self) { value in
                 if value == "station" {
                     StationSelectionView(
-                        stations: viewModel.stations
+                        stations: viewModel.stations,
+                        error: $viewModel.error
                     ) { station in
                         viewModel.selectStation(station)
                     }
+                    .onAppear {
+                        viewModel.onAppear()
+                    }
                     .navigationBarBackButtonHidden(true)
                 }
+            }
+            .onAppear {
+                viewModel.onAppear()
             }
         }
     }

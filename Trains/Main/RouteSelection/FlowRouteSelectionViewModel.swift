@@ -17,6 +17,8 @@ final class FlowRouteSelectionViewModel {
     
     var isLoading = false
     
+    var error: ErrorType?
+    
     let onFinish: (RoutePoint) -> Void
     
     // MARK: - Settings
@@ -29,9 +31,14 @@ final class FlowRouteSelectionViewModel {
     private let transportTypes = ["train", "suburban"]
     private let stationTypes = ["station", "platform", "train_station"]
     
-    init(allStationsService: AllStationsServiceProtocol, onFinish: @escaping (RoutePoint) -> Void) {
+    // MARK: - Network
+    let networkMonitor: NetworkMonitor
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(allStationsService: AllStationsServiceProtocol, networkMonitor: NetworkMonitor, onFinish: @escaping (RoutePoint) -> Void) {
         self.allStationsService = allStationsService
         self.onFinish = onFinish
+        self.networkMonitor = networkMonitor
     }
     
     func selectSettlement(_ settlement: SettlementItem) {
@@ -120,5 +127,14 @@ final class FlowRouteSelectionViewModel {
         } catch {
             Logger.error("error: \(error)")
         }
+    }
+    
+    func onAppear() {
+        handleNetworkChange(networkMonitor.isConnected)
+    }
+    
+    private func handleNetworkChange(_ isConnected: Bool) {
+        guard error != .configurationError else { return }
+        error = isConnected ? nil : .noInternet
     }
 }
