@@ -23,8 +23,9 @@ final class CarrierSelectionViewModel {
     let onSelect: (Carrier) -> Void
     
     // MARK: - Network
-    private let networkMonitor: NetworkMonitor
+    let networkMonitor: NetworkMonitor
     private var cancellables = Set<AnyCancellable>()
+    let client = APIClientFactory.makeClient()
     
     init(
         whither: RoutePoint,
@@ -62,7 +63,8 @@ final class CarrierSelectionViewModel {
                     let carrierName = carrier.title,
                     let departure = segment.departure,
                     let arrival = segment.arrival,
-                    let duration = segment.duration
+                    let duration = segment.duration,
+                    let code = carrier.code.map(String.init)
                 else { return nil }
                 
                 let imageURL = carrier.logo.flatMap(URL.init)
@@ -73,7 +75,8 @@ final class CarrierSelectionViewModel {
                     arrival: arrival,
                     duration: TimeInterval(duration),
                     connectingStation: nil,
-                    imageURL: imageURL
+                    imageURL: imageURL,
+                    code: code
                 )
             }
             

@@ -51,13 +51,6 @@ struct MainView: View {
                             Logger.info("Выбран \(carrier.carrierName)")
                             viewModel.showCarrierInfo = true
                         }
-                        
-                        NavigationStack {
-                            CarrierSelectionView(viewModel: carrierVM)
-                                .navigationDestination(isPresented: $viewModel.showCarrierInfo) {
-                                    CarrierInfoView()
-                                }
-                        }
                     }
                     .fullScreenCover(isPresented: $showStories) {
                         StoriesContentView(

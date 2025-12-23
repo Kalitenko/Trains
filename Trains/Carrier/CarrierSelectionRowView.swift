@@ -121,7 +121,8 @@ struct CarrierSelectionRowView: View {
                 )!,
                 duration: 20 * 60 * 60,
                 connectingStation: "С пересадкой в Костроме",
-                imageURL: nil
+                imageURL: nil,
+                code: ""
             )
         )
         .padding(10)
@@ -144,7 +145,8 @@ struct CarrierSelectionRowView: View {
                 )!,
                 duration: (9 * 60 + 45) * 60,
                 connectingStation: nil,
-                imageURL: nil
+                imageURL: nil,
+                code: ""
             )
         )
         .padding(10)

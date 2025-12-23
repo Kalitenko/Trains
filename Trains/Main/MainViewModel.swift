@@ -14,7 +14,7 @@ final class MainViewModel {
     var showFlow = false
     var showCarriers = false
     var showCarrierInfo = false
-    
+        
     var isSearchEnabled: Bool {
         !whither.settlement.isEmpty &&
         !whence.settlement.isEmpty &&

@@ -3,6 +3,7 @@ import SwiftUI
 struct CarrierSelectionView: View {
     
     @State private var viewModel: CarrierSelectionViewModel
+    @State private var selectedCarrier: Carrier?
     
     @Environment(\.dismiss) private var dismiss
     
@@ -36,6 +37,16 @@ struct CarrierSelectionView: View {
                     FilterView(viewModel: viewModel)
                 }
             }
+            .navigationDestination(item: $selectedCarrier) { carrier in
+                CarrierInfoView(
+                    viewModel: CarrierInfoViewModel(
+                        code: carrier.code,
+                        system: nil,
+                        service: CarrierInfoService(client: viewModel.client),
+                        networkMonitor: viewModel.networkMonitor
+                    )
+                )
+            }
         }
     }
     
@@ -57,6 +68,7 @@ struct CarrierSelectionView: View {
         List(viewModel.filteredCarriers, id: \.self) { carrier in
             Button {
                 viewModel.onSelect(carrier)
+                selectedCarrier = carrier
             } label: {
                 CarrierSelectionRowView(carrier: carrier)
                 

@@ -2,21 +2,21 @@ import OpenAPIRuntime
 import Foundation
 import OpenAPIURLSession
 
-enum LocalRoute: String {
-    case simferopolMoscow
-    case moscowKaraganda
-    case moscowSaintPetersburg
+enum LocalCarrier: String {
+    case aeroflot
+    case rzd
+    case turkishAirlines
     
     var fileName: String {
         switch self {
-        case .simferopolMoscow: "from=c146&to=c213"
-        case .moscowKaraganda: "from=c213&to=c164"
-        case .moscowSaintPetersburg: "from=s2006004&to=s9602494&date=2025-12-20"
+        case .aeroflot: "Aeroflot"
+        case .rzd: "RZD"
+        case .turkishAirlines: "Turkish Airlines"
         }
     }
 }
 
-final class LocalScheduleBetweenStationsService: ScheduleBetweenStationsServiceProtocol {
+final class LocalCarrierInfoService: CarrierInfoServiceProtocol {
     
     // MARK: - Private Properties
     private let decoder = JSONDecoderFactory.tolerantDecoder()
@@ -28,7 +28,7 @@ final class LocalScheduleBetweenStationsService: ScheduleBetweenStationsServiceP
     }
     
     // MARK: - Public Methods
-    func getScheduleBetweenStations(from: String, to: String, when date: String? = nil) async throws -> Segments {
+    func getCarrierInfo(code: String, system: String? = nil) async throws -> CarrierResponse {
         guard let url = Bundle.main.url(
             forResource: fileName,
             withExtension: "json"
@@ -37,6 +37,6 @@ final class LocalScheduleBetweenStationsService: ScheduleBetweenStationsServiceP
         }
         
         let data = try Data(contentsOf: url)
-        return try decoder.decode(Segments.self, from: data)
+        return try decoder.decode(CarrierResponse.self, from: data)
     }
 }

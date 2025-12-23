@@ -7,6 +7,7 @@ struct Carrier: Hashable {
     let duration: TimeInterval
     let connectingStation: String?
     let imageURL: URL?
+    let code: String
 }
 extension Carrier {
     var startTime: String { DateFormatter.time.string(from: departure) }

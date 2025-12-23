@@ -2,12 +2,6 @@ import OpenAPIRuntime
 import Foundation
 import OpenAPIURLSession
 
-typealias CarrierResponse = Components.Schemas.CarrierResponse
-
-protocol CarrierInfoServiceProtocol {
-    func getCarrierInfo(code: String, system: String?) async throws -> CarrierResponse
-}
-
 final class CarrierInfoService: CarrierInfoServiceProtocol {
     
     // MARK: - Private Properties
