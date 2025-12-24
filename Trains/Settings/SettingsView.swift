@@ -60,14 +60,15 @@ struct SettingsView: View {
                         .padding(8)
                         .frame(maxWidth: 250, alignment: .leading)
                         .background(.ultraThinMaterial)
-                        .cornerRadius(8)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                         .shadow(radius: 2)
                         .offset(y: -40)
                         .onTapGesture {
                             withAnimation { showTooltip = false }
                         }
                         .fixedSize(horizontal: false, vertical: true)
-                }            }
+                }
+            }
         }
     }
     

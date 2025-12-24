@@ -2,8 +2,12 @@ import SwiftUI
 
 struct FilterView: View {
     
-    @State var viewModel: CarrierSelectionViewModel
+    @State private var viewModel: CarrierSelectionViewModel
     @Environment(\.dismiss) private var dismiss
+    
+    init(viewModel: CarrierSelectionViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
     
     private var buttonIsEnabled: Bool {
         !viewModel.selectedTimeRanges.isEmpty || viewModel.selectedOption != nil
@@ -66,13 +70,10 @@ struct FilterView: View {
 
 #Preview {
     NavigationStack {
-        
         let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
         let whence = RoutePoint(settlement: "Санкт-Петербург", station: StationItem(id: "", title: "СТАНЦИЯ"))
         let monitor = NetworkMonitor()
-        
-        let client = APIClientFactory.makeClient()
-        
+                
         let vm = CarrierSelectionViewModel(
             whither: whither,
             whence: whence,

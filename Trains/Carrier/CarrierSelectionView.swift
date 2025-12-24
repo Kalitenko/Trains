@@ -105,9 +105,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Караганда", station: StationItem(id: "", title: "???"))
     let monitor = NetworkMonitor()
-    
-    let client = APIClientFactory.makeClient()
-    
+        
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,
@@ -126,9 +124,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Симферополь", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let monitor = NetworkMonitor()
-    
-    let client = APIClientFactory.makeClient()
-    
+        
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,
@@ -148,9 +144,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Санкт-Петербург", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let monitor = NetworkMonitor()
-    
-    let client = APIClientFactory.makeClient()
-    
+        
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,

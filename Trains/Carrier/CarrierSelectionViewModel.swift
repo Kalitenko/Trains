@@ -14,7 +14,7 @@ final class CarrierSelectionViewModel {
     var filteredCarriers: [Carrier]
     
     var selectedTimeRanges: Set<DepartureTimeRange> = []
-    var selectedOption: TransferOption? = nil
+    var selectedOption: TransferOption?
     var showFilters = false
     
     var error: ErrorType? = nil

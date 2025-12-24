@@ -49,8 +49,8 @@ struct RoutePointsStackView: View {
 #Preview {
     VStack(spacing: 20) {
         RoutePointsStackView(
-            whither: RoutePoint(),
-            whence: RoutePoint(),
+            whither: .empty,
+            whence: .empty,
             whitherAction: { print("tap куда") },
             whenceAction: { print("tap откуда") }
         )

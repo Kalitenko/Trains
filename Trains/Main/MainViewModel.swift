@@ -7,8 +7,8 @@ import Foundation
 final class MainViewModel {
     
     // MARK: - State
-    var whither = RoutePoint()
-    var whence = RoutePoint()
+    var whither: RoutePoint = .empty
+    var whence: RoutePoint = .empty
     var error: ErrorType?
     
     var showFlow = false

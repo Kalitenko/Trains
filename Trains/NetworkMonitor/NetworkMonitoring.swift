@@ -1,11 +1,13 @@
 import Network
 import Combine
 
-public protocol NetworkMonitoring {
+@MainActor
+protocol NetworkMonitoring {
     var isConnected: Bool { get }
 }
 
-public final class NetworkMonitor: ObservableObject, NetworkMonitoring {
+@MainActor
+final class NetworkMonitor: ObservableObject, NetworkMonitoring {
     
     @Published public private(set) var isConnected: Bool = true
     
@@ -14,7 +16,7 @@ public final class NetworkMonitor: ObservableObject, NetworkMonitoring {
     
     public init() {
         monitor.pathUpdateHandler = { [weak self] path in
-            DispatchQueue.main.async {
+            Task { @MainActor in
                 Logger.debug("🌐 path status: \(path.status)")
                 self?.isConnected = path.status == .satisfied
             }

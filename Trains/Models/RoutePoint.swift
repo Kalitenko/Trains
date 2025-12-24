@@ -1,14 +1,28 @@
 struct RoutePoint {
-    var settlement: String
-    var station: StationItem
+    let settlement: String
+    let station: StationItem
     
     init(settlement: String, station: StationItem) {
         self.settlement = settlement
         self.station = station
     }
-    
-    init() {
-        self.settlement = ""
-        self.station = StationItem(id: "", title: "")
+}
+extension RoutePoint {
+    func withSettlement(_ settlement: String) -> RoutePoint {
+        RoutePoint(
+            settlement: settlement,
+            station: station
+        )
     }
+    
+    func withStation(_ station: StationItem) -> RoutePoint {
+        RoutePoint(
+            settlement: settlement,
+            station: station
+        )
+    }
+    static let empty = RoutePoint(
+        settlement: "",
+        station: StationItem(id: "", title: "")
+    )
 }

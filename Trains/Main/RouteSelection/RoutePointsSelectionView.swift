@@ -26,8 +26,8 @@ struct RoutePointsSelectionView: View {
 #Preview {
     VStack(spacing: 20) {
         RoutePointsSelectionView(
-            whither: .constant(RoutePoint()),
-            whence: .constant(RoutePoint()),
+            whither: .constant(.empty),
+            whence: .constant(.empty),
             whitherAction: { print("tap куда") },
             whenceAction: { print("tap откуда") },
             swapAction: { print("tap swap") }
