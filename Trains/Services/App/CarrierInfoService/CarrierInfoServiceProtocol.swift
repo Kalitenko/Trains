@@ -1,5 +1,5 @@
 typealias CarrierResponse = Components.Schemas.CarrierResponse
 
-protocol CarrierInfoServiceProtocol {
+protocol CarrierInfoServiceProtocol: Sendable {
     func getCarrierInfo(code: String, system: String?) async throws -> CarrierResponse
 }

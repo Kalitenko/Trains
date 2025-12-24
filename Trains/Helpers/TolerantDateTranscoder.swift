@@ -1,47 +1,26 @@
 import Foundation
 import OpenAPIRuntime
 
-struct TolerantDateTranscoder: OpenAPIRuntime.DateTranscoder {
-    
-    private static let isoFormatterNoFraction: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime]
-        return f
-    }()
-    
-    private static let isoFormatterWithFraction: ISO8601DateFormatter = {
-        let f = ISO8601DateFormatter()
-        f.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return f
-    }()
-    
-    private static let timeFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "HH:mm:ss"
-        f.timeZone = .current
-        return f
-    }()
-    
-    private static let dateFormatter: DateFormatter = {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        f.timeZone = .current
-        return f
-    }()
+struct TolerantDateTranscoder: DateTranscoder {
     
     func decode(_ string: String) throws -> Date {
-        if let date = Self.isoFormatterNoFraction.date(from: string) {
-            return date
-        }
-        if let date = Self.isoFormatterWithFraction.date(from: string) {
-            return date
-        }
-        if let date = Self.timeFormatter.date(from: string) {
-            return date
-        }
-        if let date = Self.dateFormatter.date(from: string) {
-            return date
-        }
+        let isoNoFraction = ISO8601DateFormatter()
+        isoNoFraction.formatOptions = [.withInternetDateTime]
+
+        let isoWithFraction = ISO8601DateFormatter()
+        isoWithFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm:ss"
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+
+        if let date = isoNoFraction.date(from: string) { return date }
+        if let date = isoWithFraction.date(from: string) { return date }
+        if let date = timeFormatter.date(from: string) { return date }
+        if let date = dateFormatter.date(from: string) { return date }
+
         throw DecodingError.dataCorrupted(
             DecodingError.Context(
                 codingPath: [],
@@ -51,6 +30,8 @@ struct TolerantDateTranscoder: OpenAPIRuntime.DateTranscoder {
     }
     
     func encode(_ date: Date) -> String {
-        Self.isoFormatterNoFraction.string(from: date)
+        let isoNoFraction = ISO8601DateFormatter()
+        isoNoFraction.formatOptions = [.withInternetDateTime]
+        return isoNoFraction.string(from: date)
     }
 }
