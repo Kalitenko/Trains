@@ -30,8 +30,7 @@ struct CarrierSelectionRowView: View {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
+                        CircularProgressView()
                             .background(Color.gray.opacity(0.1))
                     case .success(let image):
                         image

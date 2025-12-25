@@ -20,6 +20,7 @@ final class CarrierSelectionViewModel {
     var error: ErrorType? = nil
     
     let title: String
+    var isLoading = false
     
     // MARK: - Network
     let networkMonitor: NetworkMonitor
@@ -52,6 +53,9 @@ final class CarrierSelectionViewModel {
     }
     
     func loadSchedule() async {
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
             let segments = try await scheduleService.getScheduleBetweenStations(
                 from: whence.station.id,

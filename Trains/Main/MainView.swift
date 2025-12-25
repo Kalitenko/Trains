@@ -130,7 +130,8 @@ private struct FlowView: View {
             
             SettlementSelectionView(
                 settlements: viewModel.settlements,
-                error: $viewModel.error
+                error: $viewModel.error,
+                isLoading: $viewModel.isLoading
             ) { settlement in
                 viewModel.selectSettlement(settlement)
                 path.append("station")
@@ -139,7 +140,8 @@ private struct FlowView: View {
                 if value == "station" {
                     StationSelectionView(
                         stations: viewModel.stations,
-                        error: $viewModel.error
+                        error: $viewModel.error,
+                        isLoading: $viewModel.isLoading
                     ) { station in
                         viewModel.selectStation(station)
                     }

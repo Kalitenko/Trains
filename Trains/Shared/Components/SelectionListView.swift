@@ -7,42 +7,49 @@ struct SelectionListView<Item: SelectionItem>: View {
     let notFoundText: String
     let searchPlaceholder: String
     @Binding var error: ErrorType?
+    @Binding var isLoading: Bool
     let onSelect: (Item) -> Void
     
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
     
     var filteredItems: [Item] {
-        searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText)}
+        searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
     
     var body: some View {
         ParentContainer(error: $error) {
-            VStack(spacing: 0) {
-                SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
-                List(filteredItems, id: \.self) { item in
-                    Button {
-                        onSelect(item)
-                    } label: {
-                        SelectionListRowView(title: item.title)
+            ZStack {
+                VStack(spacing: 0) {
+                    SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
+                    List(filteredItems, id: \.self) { item in
+                        Button {
+                            onSelect(item)
+                        } label: {
+                            SelectionListRowView(title: item.title)
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.appBackground)
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.appBackground)
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .background(Color.appBackground)
-                .overlay {
-                    if filteredItems.isEmpty {
-                        Text(notFoundText)
-                            .font(.bold24)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.appBackground)
+                    .overlay {
+                        if filteredItems.isEmpty {
+                            Text(notFoundText)
+                                .font(.bold24)
+                        }
                     }
+                    .opacity(isLoading ? 0 : 1)
+                    .navigationTitle(title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .backButtonToolbar(dismiss)
                 }
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                .backButtonToolbar(dismiss)
+                .appBackground()
+                
+                CircularProgressView()
+                    .opacity(isLoading ? 1 : 0)
             }
-            .appBackground()
         }
     }
 }
@@ -61,6 +68,7 @@ private struct SelectionItemExample: SelectionItem {
             notFoundText: "Опция не найдена",
             searchPlaceholder: "Поиск",
             error: .constant(nil),
+            isLoading: .constant(true),
             onSelect: { item in
                 print("Выбор: \(item)")
             })

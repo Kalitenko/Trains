@@ -4,6 +4,7 @@ struct StationSelectionView: View {
     
     let stations: [StationItem]
     let error: Binding<ErrorType?>
+    let isLoading: Binding<Bool>
     let onSelect: (StationItem) -> Void
     
     var body: some View {
@@ -13,6 +14,7 @@ struct StationSelectionView: View {
             notFoundText: "Станция не найдена",
             searchPlaceholder: "Введите запрос",
             error: error,
+            isLoading: isLoading,
             onSelect: onSelect)
     }
 }
@@ -25,7 +27,8 @@ struct StationSelectionView: View {
     ]
     NavigationStack {
         StationSelectionView(stations: items,
-                             error: .constant(nil)) { station in
+                             error: .constant(nil),
+                             isLoading: .constant(true)) { station in
                 print(station)
             }
     }

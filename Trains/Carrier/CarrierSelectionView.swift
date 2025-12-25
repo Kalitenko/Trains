@@ -29,6 +29,7 @@ struct CarrierSelectionView: View {
                 .backButtonToolbar(dismiss)
                 button
             }
+            .opacity(viewModel.isLoading ? 0 : 1)
             .task {
                 await viewModel.loadSchedule()
             }
@@ -51,6 +52,9 @@ struct CarrierSelectionView: View {
                     carrierInfoVM.onAppear()
                 }
             }
+            
+            CircularProgressView()
+                .opacity(viewModel.isLoading ? 1 : 0)
             
         }
     }
@@ -105,7 +109,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Караганда", station: StationItem(id: "", title: "???"))
     let monitor = NetworkMonitor()
-        
+    
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,
@@ -124,7 +128,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Симферополь", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let monitor = NetworkMonitor()
-        
+    
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,
@@ -144,7 +148,7 @@ struct CarrierSelectionView: View {
     let whither = RoutePoint(settlement: "Москва", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let whence = RoutePoint(settlement: "Санкт-Петербург", station: StationItem(id: "", title: "СТАНЦИЯ"))
     let monitor = NetworkMonitor()
-        
+    
     let vm = CarrierSelectionViewModel(
         whither: whither,
         whence: whence,

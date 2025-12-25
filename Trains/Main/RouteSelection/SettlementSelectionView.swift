@@ -6,6 +6,7 @@ struct SettlementSelectionView: View {
     
     let settlements: [SettlementItem]
     let error: Binding<ErrorType?>
+    let isLoading: Binding<Bool>
     let onSelect: (SettlementItem) -> Void
     
     var body: some View {
@@ -15,6 +16,7 @@ struct SettlementSelectionView: View {
             notFoundText: "Город не найден",
             searchPlaceholder: "Введите запрос",
             error: error,
+            isLoading: isLoading,
             onSelect: onSelect
         )
     }
@@ -28,7 +30,8 @@ struct SettlementSelectionView: View {
     ]
     NavigationStack {
         SettlementSelectionView(settlements: items,
-                                error: .constant(nil)) { settlement in
+                                error: .constant(nil),
+                                isLoading: .constant(true)) { settlement in
             print(settlement)
         }
     }
