@@ -1,0 +1,47 @@
+import Combine
+import SwiftUI
+import Foundation
+
+@MainActor
+@Observable
+final class MainViewModel {
+    
+    // MARK: - State
+    var whither: RoutePoint = .empty
+    var whence: RoutePoint = .empty
+    var error: ErrorType?
+    
+    var showFlow = false
+    var showCarriers = false
+    
+    var isSearchEnabled: Bool {
+        !whither.settlement.isEmpty &&
+        !whence.settlement.isEmpty &&
+        !whither.station.title.isEmpty &&
+        !whence.station.title.isEmpty
+    }
+    
+    // MARK: - Network
+    let networkMonitor: NetworkMonitor
+    private var cancellables = Set<AnyCancellable>()
+    var client = APIClientFactory.makeClient()
+    
+    init(networkMonitor: NetworkMonitor) {
+        self.networkMonitor = networkMonitor
+        
+        networkMonitor.$isConnected
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isConnected in
+                self?.handleNetworkChange(isConnected)
+            }
+            .store(in: &cancellables)
+    }
+    
+    func onAppear() {
+        handleNetworkChange(networkMonitor.isConnected)
+    }
+    
+    private func handleNetworkChange(_ isConnected: Bool) {
+        error = isConnected ? nil : .noInternet
+    }
+}

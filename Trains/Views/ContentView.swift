@@ -3,7 +3,7 @@ import OpenAPIURLSession
 
 struct ContentView: View {
     
-    private let apiKey: String = ""
+    @State private var client: Client?
     
     var body: some View {
         VStack {
@@ -14,27 +14,30 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
+            if client == nil {
+                client = APIClientFactory.makeClient()
+            }
             let date = Date()
             let formattedDateString = date.ISO8601DateString
-//            testFetchStations()
-//            testFetchCopyright()
-//            testFetchScheduleBetweenStations()
-//            testFetchScheduleBetweenStationsForDate(formattedDateString: formattedDateString)
-//            testFetchStationSchedule()
-//            testFetchStationScheduleForDate(formattedDateString: formattedDateString)
-//            testFetchRouteStations()
-//            testFetchRouteStationsForDate(formattedDateString: formattedDateString)
-//            testFetchNearestCity()
-//            testFetchCarrierInfo()
-//            testFetchCarrierInfoIATA()
-//            testFetchAllStations()
+            //            testFetchStations()
+            //            testFetchCopyright()
+            testFetchScheduleBetweenStations()
+            testFetchScheduleBetweenStationsForDate(formattedDateString: formattedDateString)
+            //            testFetchStationSchedule()
+            //            testFetchStationScheduleForDate(formattedDateString: formattedDateString)
+            //            testFetchRouteStations()
+            //            testFetchRouteStationsForDate(formattedDateString: formattedDateString)
+            //            testFetchNearestCity()
+            //                        testFetchCarrierInfo()
+            //                        testFetchCarrierInfoIATA()
+            //                        testFetchAllStations()
         }
     }
     
     func testFetchStations() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = NearestStationsService(client: client)
                 
                 print("Fetching stations...")
@@ -54,7 +57,7 @@ struct ContentView: View {
     func testFetchCopyright() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = CopyrightService(client: client)
                 
                 print("Fetching copyright...")
@@ -70,7 +73,7 @@ struct ContentView: View {
     func testFetchScheduleBetweenStations() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = ScheduleBetweenStationsService(client: client)
                 
                 print("Fetching schedule between stations...")
@@ -88,7 +91,7 @@ struct ContentView: View {
     func testFetchScheduleBetweenStationsForDate(formattedDateString: String) {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = ScheduleBetweenStationsService(client: client)
                 
                 print("Fetching schedule between stations...")
@@ -107,7 +110,7 @@ struct ContentView: View {
     func testFetchStationSchedule() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = StationScheduleService(client: client)
                 
                 print("Fetching station schedule...")
@@ -124,7 +127,7 @@ struct ContentView: View {
     func testFetchStationScheduleForDate(formattedDateString: String) {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = StationScheduleService(client: client)
                 
                 print("Fetching station schedule...")
@@ -141,7 +144,7 @@ struct ContentView: View {
     func testFetchRouteStations() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = RouteStationsService(client: client)
                 
                 print("Fetching route stations...")
@@ -158,7 +161,7 @@ struct ContentView: View {
     func testFetchRouteStationsForDate(formattedDateString: String) {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = RouteStationsService(client: client)
                 
                 print("Fetching route stations...")
@@ -175,7 +178,7 @@ struct ContentView: View {
     func testFetchNearestCity() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = NearestCityService(client: client)
                 
                 print("Fetching nearest city...")
@@ -195,7 +198,7 @@ struct ContentView: View {
     func testFetchCarrierInfo() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = CarrierInfoService(client: client)
                 
                 let code = "4240" // РЖД/ДОСС
@@ -215,7 +218,7 @@ struct ContentView: View {
     func testFetchCarrierInfoIATA() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
+                guard let client else { return }
                 let service = CarrierInfoService(client: client)
                 
                 let code = "SU" // Аэрофлот
@@ -237,8 +240,9 @@ struct ContentView: View {
     func testFetchAllStations() {
         Task {
             do {
-                let client = APIClientFactory.makeClient(apiKey: apiKey)
-                let service = AllStationsService(client: client)
+                guard let client else { return }
+                //                let service = AllStationsService(client: client)
+                let service = LocalAllStationsService()
                 
                 print("Fetching all stations...")
                 let response = try await service.getAllStations()

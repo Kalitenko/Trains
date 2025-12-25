@@ -1,0 +1,18 @@
+{
+  "carrier": {
+    "code": 4240,
+    "title": "РЖД/ДОСС",
+    "codes": {
+      "sirena": null,
+      "iata": null,
+      "icao": null
+    },
+    "address": "",
+    "url": "http://www.rzd.ru/",
+    "email": "",
+    "contacts": "Единая телефонная линия: +7 (800) 775-00-00 (звонок бесплатный из всех регионов РФ).",
+    "phone": "+7 (800) 775-00-00",
+    "logo": "https://yastat.net/s3/rasp/media/data/company/logo/doss.jpg",
+    "offices": []
+  }
+}

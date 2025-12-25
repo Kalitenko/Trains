@@ -1,75 +1,76 @@
 import SwiftUI
 
-struct SelectionListView: View {
+struct SelectionListView<Item: SelectionItem>: View {
     
     let title: String
-    let items: [String]
+    let items: [Item]
     let notFoundText: String
     let searchPlaceholder: String
-    let onSelect: (String) -> Void
+    @Binding var error: ErrorType?
+    @Binding var isLoading: Bool
+    let onSelect: (Item) -> Void
     
     @State private var searchText = ""
     @Environment(\.dismiss) private var dismiss
-    @State private var error: ErrorType? = nil
     
-    var filteredItems: [String] {
-        searchText.isEmpty ? items : items.filter { $0.localizedCaseInsensitiveContains(searchText)}
+    var filteredItems: [Item] {
+        searchText.isEmpty ? items : items.filter { $0.title.localizedCaseInsensitiveContains(searchText) }
     }
     
     var body: some View {
         ParentContainer(error: $error) {
-            VStack(spacing: 0) {
-                SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
-                List(filteredItems, id: \.self) { item in
-                    Button {
-                        onSelect(item)
-                    } label: {
-                        SelectionListRowView(title: item)
+            ZStack {
+                VStack(spacing: 0) {
+                    SearchBar(text: $searchText, searchPlaceholder: searchPlaceholder)
+                    List(filteredItems, id: \.self) { item in
+                        Button {
+                            onSelect(item)
+                        } label: {
+                            SelectionListRowView(title: item.title)
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.appBackground)
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.appBackground)
-                }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .background(Color.appBackground)
-                .overlay {
-                    if filteredItems.isEmpty {
-                        Text(notFoundText)
-                            .font(.bold24)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.appBackground)
+                    .overlay {
+                        if filteredItems.isEmpty {
+                            Text(notFoundText)
+                                .font(.bold24)
+                        }
                     }
+                    .opacity(isLoading ? 0 : 1)
+                    .navigationTitle(title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .backButtonToolbar(dismiss)
                 }
-                .navigationTitle(title)
-                .navigationBarTitleDisplayMode(.inline)
-                .backButtonToolbar(dismiss)
+                .appBackground()
+                
+                CircularProgressView()
+                    .opacity(isLoading ? 1 : 0)
             }
-            .appBackground()
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        SelectionListView(
-            title: "Выбор",
-            items: ["Один", "Два", "Три"],
-            notFoundText: "Опция не найдена",
-            searchPlaceholder: "Поиск",
-            onSelect: { item in
-                print("Выбор: \(item)")
-            })
-    }
+private struct SelectionItemExample: SelectionItem {
+    var id: UUID = UUID()
+    var title: String
 }
 
-#Preview("Dark") {
+#Preview {
+    let items = [SelectionItemExample(title: "Один"), SelectionItemExample(title: "Два"), SelectionItemExample(title: "Три")]
     NavigationStack {
         SelectionListView(
             title: "Выбор",
-            items: ["Один", "Два", "Три"],
+            items: items,
             notFoundText: "Опция не найдена",
             searchPlaceholder: "Поиск",
+            error: .constant(nil),
+            isLoading: .constant(true),
             onSelect: { item in
                 print("Выбор: \(item)")
             })
     }
-    .preferredColorScheme(.dark)
 }
